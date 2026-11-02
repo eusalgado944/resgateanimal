@@ -225,7 +225,7 @@ docker stop resgateanimal-tests
 unset POSTGRES_PASSWORD TEST_DATABASE_URL
 ```
 
-Frontend: execute `npm run lint` e `npm run build` em `frontend/`.
+Frontend: execute `npm test`, `npm run lint` e `npm run build` em `frontend/`.
 Operação: `bash -n scripts/backup.sh`, ShellCheck se instalado, e
 `docker compose config --quiet` com as variáveis obrigatórias configuradas.
 Para validação manual, exercite cadastro e foto de animal, vitrine,
@@ -238,3 +238,18 @@ e a execução como usuário não privilegiado passaram. A rotina de backup
 passou em ShellCheck e verificações simuladas de sucesso, falha,
 concorrência, retenção e colisão de nomes. Esses resultados não substituem
 um teste de recuperação no servidor de destino.
+
+Validação da interface: oito testes unitários e 22 cenários de navegador
+com um mock estrito do contrato da API aprovados; lint, build Vite e
+build/configuração Nginx no Docker aprovados. O início do conjunto real
+de três containers também foi verificado, incluindo migrations, criação
+do administrador, seed opcional, health check e permissões de uploads.
+CodeQL não encontrou alertas de JavaScript.
+
+Integração real: 26 cenários de navegador aprovados com os três containers,
+incluindo adoção, todos os canais públicos, administração, upload PNG,
+triagem, atendimento, paginação de todas as listas e layout móvel. A persistência após reinício foi
+verificada. O script de backup foi executado contra essa instalação
+descartável; os arquivos foram lidos e o dump restaurado em outro banco
+isolado, preservando os quatro animais. A recuperação completa de arquivos,
+TLS, cron e operação no Proxmox ainda precisam de validação no destino.
