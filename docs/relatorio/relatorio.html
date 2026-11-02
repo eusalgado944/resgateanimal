@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatório Final — Resgate Animal</title>
+<style>
+  :root {
+    --laranja: #e8772e;
+    --laranja-escuro: #b85a1a;
+    --tinta: #1f1f1f;
+    --tinta-2: #4a4a4a;
+    --tinta-3: #6e6e6e;
+    --linha: #d9d2ca;
+    --fundo-suave: #fbf5ef;
+    --verde: #2f7d5d;
+    --verde-fundo: #edf6f1;
+    --ambar-fundo: #fbf3e6;
+    --cinza-fundo: #f2f4f3;
+  }
+
+  @page {
+    size: A4;
+    margin: 2.6cm 2cm 2.2cm 3cm;
+    @top-left {
+      content: "Resgate Animal — Sistema Web para ONG de Resgate Animal";
+      font: 8.5pt Arial, Helvetica, sans-serif;
+      color: #7a7a7a;
+      vertical-align: bottom;
+      padding-bottom: 6pt;
+      border-bottom: 0.5pt solid #d9d2ca;
+    }
+    @top-right {
+      content: "Relatório Final";
+      font: 8.5pt Arial, Helvetica, sans-serif;
+      color: #7a7a7a;
+      vertical-align: bottom;
+      padding-bottom: 6pt;
+      border-bottom: 0.5pt solid #d9d2ca;
+    }
+    @bottom-right {
+      content: "Página " counter(page) " de " counter(pages);
+      font: 8.5pt Arial, Helvetica, sans-serif;
+      color: #7a7a7a;
+    }
+    @bottom-left {
+      content: "UNINOVE — Ciência da Computação";
+      font: 8.5pt Arial, Helvetica, sans-serif;
+      color: #7a7a7a;
+    }
+  }
+  @page pre {
+    @top-left { content: none; border: none; }
+    @top-right { content: none; border: none; }
+    @bottom-left { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--tinta);
+    font: 11.5pt/1.5 Arial, Helvetica, sans-serif;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  /* Elementos pré-textuais */
+  .pre { page: pre; break-after: page; min-height: 24cm; position: relative; text-align: center; }
+  .capa { display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 24.4cm; padding: 0.2cm 0; }
+  .capa .instituicao { font-weight: bold; font-size: 13pt; letter-spacing: .4pt; }
+  .capa .curso { font-size: 11pt; margin-top: 4pt; }
+  .capa .logo { width: 4.2cm; height: 4.2cm; }
+  .capa .tipo { font-size: 12pt; letter-spacing: 2pt; color: var(--tinta-2); }
+  .capa h1 { font-size: 15pt; line-height: 1.35; margin: 10pt 0 6pt; text-align: center; }
+  .capa .marca { font-size: 30pt; font-weight: bold; color: var(--laranja-escuro); letter-spacing: -.5pt; }
+  .capa .subtitulo { font-size: 11pt; color: var(--tinta-2); margin-top: 4pt; }
+  .capa .local { font-size: 11pt; }
+  .rotulo { font-size: 9.5pt; letter-spacing: 1.2pt; color: var(--tinta-3); text-transform: uppercase; margin-bottom: 2pt; }
+
+  .rosto { display: flex; flex-direction: column; height: 24.4cm; }
+  .rosto .topo { text-align: center; }
+  .autores { margin: 22pt auto 0; text-align: left; width: 13.5cm; font-size: 11pt; }
+  .autores li { margin: 3pt 0; }
+  .natureza { margin: 34pt 0 0 7.5cm; text-align: left; font-size: 10.5pt; line-height: 1.35; }
+  .aviso-ficcao {
+    margin-top: auto; text-align: left; font-size: 9.5pt; line-height: 1.4; color: var(--tinta-2);
+    border: 1pt solid var(--linha); border-left: 4pt solid var(--laranja); background: var(--fundo-suave);
+    padding: 8pt 10pt; border-radius: 4pt;
+  }
+
+  .aprovacao { text-align: center; }
+  .assinatura { margin: 46pt auto 0; width: 9cm; border-top: 0.8pt solid var(--tinta); padding-top: 4pt; font-size: 10.5pt; }
+
+  .dedicatoria { display: flex; align-items: flex-end; justify-content: flex-end; height: 24cm; }
+  .dedicatoria p { width: 8cm; text-align: justify; font-style: italic; }
+
+  .pre h2 { text-align: center; font-size: 12.5pt; letter-spacing: 1pt; margin: 0 0 18pt; }
+  .pre.texto { text-align: justify; }
+  .palavras { margin-top: 10pt; }
+
+  /* Listas e sumário */
+  .lista { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 10.5pt; }
+  .lista li { padding: 2.5pt 0; border-bottom: 0.5pt dotted var(--linha); }
+  .sumario { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 10.5pt; }
+  .sumario li { display: flex; align-items: baseline; padding: 1.6pt 0; }
+  .sumario li .t { white-space: nowrap; }
+  .sumario li .dots { flex: 1; border-bottom: 1pt dotted #9a9a9a; margin: 0 4pt; transform: translateY(-3pt); }
+  .sumario li .pg { min-width: 18pt; text-align: right; font-variant-numeric: tabular-nums; }
+  .sumario li.n1 { font-weight: bold; margin-top: 4pt; }
+  .sumario li.n2 { padding-left: 14pt; }
+  .sumario li.n3 { padding-left: 28pt; }
+
+  /* Texto principal */
+  .cap { break-before: page; }
+  h1.titulo { font-size: 14pt; letter-spacing: .3pt; margin: 0 0 12pt; color: var(--tinta); text-align: left; }
+  h2 { font-size: 12pt; margin: 16pt 0 6pt; text-align: left; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 12pt 0 4pt; text-align: left; break-after: avoid; color: var(--tinta-2); }
+  p { margin: 0 0 7pt; text-indent: 1.25cm; orphans: 3; widows: 3; }
+  p.sem-recuo, .caixa p, td p, figure p { text-indent: 0; }
+  ul.marcadores { margin: 0 0 8pt 0; padding-left: 1.6cm; }
+  ul.marcadores li { margin: 2pt 0; }
+  code { font: 9.5pt Consolas, "Courier New", monospace; background: #f3efea; padding: 0 3pt; border-radius: 2pt; }
+  .mk { font-size: 1px; line-height: 0; color: #fff; letter-spacing: 0; }
+
+  /* Figuras e tabelas */
+  figure { margin: 10pt 0 12pt; break-inside: avoid; text-align: center; }
+  figure img { max-width: 100%; border: 0.75pt solid var(--linha); border-radius: 3pt; }
+  figure img.sem-borda { border: none; }
+  figure.alta img { max-height: 15.5cm; }
+  figure.media img { max-height: 11cm; }
+  figcaption, .legenda-tab { font-size: 9.5pt; color: var(--tinta-2); text-align: center; line-height: 1.35; margin-top: 5pt; }
+  figcaption b, .legenda-tab b { color: var(--tinta); }
+  .fonte { display: block; font-size: 8.5pt; color: var(--tinta-3); }
+  .lado-a-lado { display: flex; gap: 16pt; justify-content: center; align-items: flex-start; }
+  .lado-a-lado img { width: 5.3cm; }
+
+  .tabela { break-inside: avoid; margin: 8pt 0 12pt; }
+  .legenda-tab { margin: 0 0 4pt; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; line-height: 1.35; text-align: left; }
+  th { background: #f4ece4; color: var(--tinta); font-weight: bold; border-top: 1pt solid var(--tinta); border-bottom: 0.8pt solid var(--tinta); padding: 4pt 5pt; }
+  td { border-bottom: 0.5pt solid var(--linha); padding: 3.5pt 5pt; vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 1pt solid var(--tinta); }
+  td code { font-size: 8.5pt; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .st { white-space: nowrap; font-weight: bold; }
+  .st.ok { color: var(--verde); }
+  .st.parcial { color: #a1650f; }
+  .st.plan { color: var(--tinta-3); }
+
+  /* Componentes do estudo de caso */
+  .numeros { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7pt; margin: 10pt 0 6pt; break-inside: avoid; }
+  .numero { border: 0.75pt solid var(--linha); border-radius: 5pt; padding: 8pt 6pt 7pt; text-align: center; background: #fff; }
+  .numero b { display: block; font-size: 19pt; line-height: 1.1; color: var(--tinta); font-variant-numeric: tabular-nums; }
+  .numero span { font-size: 8.5pt; color: var(--tinta-2); line-height: 1.25; display: block; margin-top: 3pt; }
+
+  .citacao { margin: 8pt 0 8pt 1.6cm; padding: 2pt 0 2pt 10pt; border-left: 3pt solid var(--laranja); font-style: italic; color: var(--tinta-2); text-align: left; break-inside: avoid; }
+  .citacao cite { display: block; font-style: normal; font-size: 9pt; color: var(--tinta-3); margin-top: 2pt; }
+
+  .linha-tempo { position: relative; margin: 6pt 0 0; padding: 0; list-style: none; text-align: left; }
+  .linha-tempo::before { content: ""; position: absolute; left: 1.55cm; top: 4pt; bottom: 4pt; width: 2pt; background: #f1c9a8; }
+  .linha-tempo li { position: relative; display: flex; gap: 0; padding: 3pt 0 6pt; }
+  .linha-tempo .ano { width: 1.25cm; font-weight: bold; color: var(--laranja-escuro); font-variant-numeric: tabular-nums; }
+  .linha-tempo .ponto { width: 0.6cm; position: relative; }
+  .linha-tempo .ponto::after { content: ""; position: absolute; left: 0.14cm; top: 4pt; width: 8pt; height: 8pt; border-radius: 50%; background: var(--laranja); box-shadow: 0 0 0 2pt #fff; }
+  .linha-tempo .txt { flex: 1; font-size: 10.5pt; line-height: 1.4; }
+  .linha-tempo .txt b { display: block; }
+
+  .caixa { border: 0.75pt solid var(--linha); border-radius: 5pt; padding: 8pt 11pt; margin: 8pt 0 10pt; background: var(--fundo-suave); break-inside: avoid; text-align: left; font-size: 10.5pt; }
+  .caixa .rotulo { color: var(--laranja-escuro); }
+
+  .grafico { break-inside: avoid; }
+  .grafico svg { width: 100%; height: auto; }
+
+  .referencias p { text-indent: 0; text-align: left; margin-bottom: 9pt; font-size: 10.5pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<section class="pre capa">
+  <div>
+    <div class="instituicao">UNIVERSIDADE NOVE DE JULHO — UNINOVE</div>
+    <div class="curso">Curso de Ciência da Computação</div>
+  </div>
+  <svg class="logo" viewBox="0 0 120 120" aria-hidden="true">
+    <circle cx="60" cy="60" r="58" fill="#fbf3e6" stroke="#e8772e" stroke-width="3"/>
+    <ellipse cx="60" cy="74" rx="20" ry="17" fill="#e8772e"/>
+    <ellipse cx="36" cy="54" rx="8.5" ry="11" fill="#e8772e" transform="rotate(-20 36 54)"/>
+    <ellipse cx="51" cy="40" rx="8.5" ry="11.5" fill="#e8772e" transform="rotate(-6 51 40)"/>
+    <ellipse cx="69" cy="40" rx="8.5" ry="11.5" fill="#e8772e" transform="rotate(6 69 40)"/>
+    <ellipse cx="84" cy="54" rx="8.5" ry="11" fill="#e8772e" transform="rotate(20 84 54)"/>
+    <path d="M60 86 l-9-8 a5.6 5.6 0 0 1 9-6.5 a5.6 5.6 0 0 1 9 6.5z" fill="#fff"/>
+  </svg>
+  <div>
+    <div class="tipo">RELATÓRIO FINAL</div>
+    <h1>PROJETO E MODELAGEM DE SISTEMAS DE SOFTWARE PARA</h1>
+    <div class="marca">Resgate Animal</div>
+    <div class="subtitulo">Sistema web de divulgação, adoção e gestão para ONGs de resgate animal<br>Estudo de caso: Associação Focinho Amigo (fictícia)</div>
+  </div>
+  <div>
+    <div class="rotulo">Orientador</div>
+    <div>Prof(a). Dr(a). ____________________________________</div>
+  </div>
+  <div class="local">São Paulo – SP<br>2026</div>
+</section>
+
+<!-- ============ FOLHA DE ROSTO ============ -->
+<section class="pre rosto">
+  <div class="topo">
+    <h1 style="font-size:13pt;margin:0 0 4pt">PROJETO E MODELAGEM DE SISTEMAS DE SOFTWARE PARA</h1>
+    <div class="marca" style="font-size:22pt;font-weight:bold;color:#b85a1a">Resgate Animal</div>
+  </div>
+  <div class="rotulo" style="margin-top:22pt">Autores</div>
+  <ul class="autores">
+    <li><b>David Salgado Menendes</b> (Infraestrutura DevOps / Desenvolvimento full stack) — RA 3024104037</li>
+    <li>______________________________ (Desenvolvimento back-end) — RA ______________</li>
+    <li>______________________________ (Desenvolvimento front-end) — RA ______________</li>
+    <li>______________________________ (Banco de dados / DBA) — RA ______________</li>
+    <li>______________________________ (Testes e documentação) — RA ______________</li>
+  </ul>
+  <div class="natureza">
+    Trabalho apresentado ao curso de Ciência da Computação da Universidade Nove de Julho, como parte dos requisitos para a obtenção do grau de Bacharel em Ciência da Computação.<br><br>
+    Orientador(a): Prof(a). Dr(a). ______________________<br>
+    Unidade Campus: Vila Prudente (VP)<br>
+    Curso: Ciência da Computação<br>
+    Período: Segundo Semestre de 2026
+  </div>
+  <div class="aviso-ficcao">
+    <b>Nota sobre o estudo de caso.</b> A Associação Focinho Amigo, seus integrantes, animais, adotantes, doadores e todos os números apresentados no Capítulo 2 são <b>fictícios</b>, criados para contextualizar o sistema. As capturas de tela mostram o sistema real em execução, preenchido com esses dados fictícios. As fotografias dos animais foram substituídas por ilustrações geradas para este trabalho.
+  </div>
+</section>
+
+<!-- ============ FOLHA DE APROVAÇÃO ============ -->
+<section class="pre aprovacao">
+  <h2>FOLHA DE APROVAÇÃO</h2>
+  <p class="sem-recuo" style="text-align:center">David Salgado Menendes — RA 3024104037</p>
+  <p class="sem-recuo" style="text-align:center;color:#6e6e6e">Demais integrantes: ____________________________________</p>
+  <p class="sem-recuo" style="text-align:justify;margin:26pt 1.5cm 0">Trabalho de conclusão aprovado como requisito parcial para a obtenção do grau de Bacharel, do curso de Ciência da Computação, da Universidade Nove de Julho, pelo(a) professor(a) orientador(a) abaixo mencionado(a).</p>
+  <p class="sem-recuo" style="text-align:center;margin-top:26pt">São Paulo, ____ de ______________ de 2026</p>
+  <div class="assinatura">Prof(a). Dr(a). ______________________<br>Orientador(a)</div>
+</section>
+
+<!-- ============ DEDICATÓRIA ============ -->
+<section class="pre dedicatoria">
+  <p>Dedicamos este trabalho a todas as pessoas que, anonimamente, param o carro na estrada, abrem o portão de casa ou dividem a própria ração com um animal que ninguém mais viu. E a cada bicho que esperou, com paciência, alguém que voltasse para buscá-lo.</p>
+</section>
+
+<!-- ============ AGRADECIMENTOS ============ -->
+<section class="pre texto">
+  <h2>AGRADECIMENTOS</h2>
+  <p>A realização deste trabalho só foi possível graças ao apoio e à colaboração de diversas pessoas, às quais expressamos nossa gratidão.</p>
+  <p>Aos nossos familiares, pelo apoio e pela paciência durante as noites e fins de semana dedicados ao projeto.</p>
+  <p>Aos professores do curso de Ciência da Computação da Universidade Nove de Julho, pelos ensinamentos que sustentaram cada decisão técnica aqui descrita, e ao(à) orientador(a) deste trabalho, pela orientação ao longo do semestre.</p>
+  <p>Aos voluntários de proteção animal com quem conversamos informalmente ao longo do semestre. Seus relatos sobre cadernos de vacinação perdidos, mensagens de adoção esquecidas no celular e prestações de contas feitas à mão inspiraram a história fictícia da Associação Focinho Amigo e, sobretudo, os requisitos do sistema.</p>
+  <p>À comunidade de software livre, cujo trabalho — Node.js, React, PostgreSQL, Docker, Proxmox e tantas outras ferramentas — permite que uma solução profissional seja construída e mantida com custo de licença zero, condição essencial para o terceiro setor.</p>
+  <p>A todos, o nosso muito obrigado.</p>
+</section>
+
+<!-- ============ RESUMO ============ -->
+<section class="pre texto">
+  <h2>RESUMO</h2>
+  <p>O presente trabalho descreve a especificação, o desenvolvimento e a preparação para implantação do <b>Resgate Animal</b>, uma plataforma web para organizações não governamentais (ONGs) de resgate e proteção animal. O sistema reúne, em uma única aplicação, o site público da ONG — com vitrine de animais para adoção, candidatura on-line e canal de contato, voluntariado, doação e denúncia — e uma área administrativa para cadastro de animais com fotos, triagem das candidaturas e gestão das mensagens recebidas. Para contextualizar o problema, foi construído um estudo de caso fictício, a Associação Focinho Amigo, cuja operação dependia de cadernos, planilhas e mensagens de WhatsApp. A aplicação foi desenvolvida integralmente em JavaScript: API REST em Node.js 24 com Express 5, validação por esquemas zod, autenticação JWT, senhas com bcrypt e acesso a dados com o <i>query builder</i> Knex; interface em React 19 com Vite; e banco de dados PostgreSQL 18 com <i>migrations</i> versionadas. A infraestrutura foi projetada para um servidor Proxmox VE, com a aplicação empacotada em três containers Docker (Nginx, API e banco) dentro de um container LXC, rotina de backup diário e documentação de implantação. O sistema foi validado em ambiente local por 31 casos de teste automatizados de ponta a ponta na API, todos aprovados, além de verificação manual das telas. O trabalho também entrega a especificação completa do produto — 39 requisitos funcionais, 13 não funcionais e 10 regras de negócio — e cinco diagramas de modelagem, servindo de base para as próximas etapas: prontuário veterinário, controle financeiro e voluntariado.</p>
+  <p class="sem-recuo palavras"><b>Palavras-chave:</b> ONG; Proteção animal; Adoção; Node.js; React; PostgreSQL; Docker; Proxmox; Sistemas Web.</p>
+</section>
+
+<!-- ============ ABSTRACT ============ -->
+<section class="pre texto">
+  <h2>ABSTRACT</h2>
+  <p>This paper describes the specification, development and deployment preparation of <b>Resgate Animal</b>, a web platform for animal rescue non-governmental organizations (NGOs). The system combines the NGO's public website — an adoption showcase, online adoption applications and a contact channel for volunteering, donations and abuse reports — with an administrative area for registering animals with photos, screening applications and managing incoming messages. To frame the problem, a fictional case study was created: the Focinho Amigo Association, whose operation relied on notebooks, spreadsheets and WhatsApp messages. The application was built entirely in JavaScript: a REST API on Node.js 24 with Express 5, zod schema validation, JWT authentication, bcrypt password hashing and the Knex query builder; a React 19 interface built with Vite; and a PostgreSQL 18 database with versioned migrations. The infrastructure was designed for a Proxmox VE server, packaging the application as three Docker containers (Nginx, API and database) inside an LXC container, with daily backups and deployment documentation. The system was validated locally by 31 automated end-to-end API test cases, all passing, plus manual screen verification. The work also delivers the full product specification — 39 functional requirements, 13 non-functional requirements and 10 business rules — and five modeling diagrams, laying the groundwork for the next stages: veterinary records, financial control and volunteer management.</p>
+  <p class="sem-recuo palavras"><b>Keywords:</b> NGO; Animal welfare; Adoption; Node.js; React; PostgreSQL; Docker; Proxmox; Web Systems.</p>
+</section>
+
+<!-- ============ LISTA DE FIGURAS ============ -->
+<section class="pre texto">
+  <h2>LISTA DE FIGURAS</h2>
+  <ul class="lista">
+    <li>Figura 1 – Linha do tempo da Associação Focinho Amigo</li>
+    <li>Figura 2 – Adoções realizadas por mês em 2026</li>
+    <li>Figura 3 – Canais por onde chegavam os pedidos de adoção antes do sistema</li>
+    <li>Figura 4 – Modelo de domínio (tabelas e relacionamentos)</li>
+    <li>Figura 5 – Diagrama de estados do animal</li>
+    <li>Figura 6 – Diagrama de estados do processo de adoção</li>
+    <li>Figura 7 – Arquitetura em camadas da aplicação</li>
+    <li>Figura 8 – Topologia de implantação no Proxmox VE</li>
+    <li>Figura 9 – Página inicial do site</li>
+    <li>Figura 10 – Vitrine de adoção com filtros</li>
+    <li>Figura 11 – Vitrine filtrada por espécie (gatos)</li>
+    <li>Figura 12 – Página do animal com formulário de candidatura</li>
+    <li>Figura 13 – Confirmação de envio da candidatura</li>
+    <li>Figura 14 – Página "Como ajudar" com formulário de contato</li>
+    <li>Figura 15 – Site em tela de celular</li>
+    <li>Figura 16 – Tela de login da área administrativa</li>
+    <li>Figura 17 – Painel administrativo: lista de animais</li>
+    <li>Figura 18 – Painel administrativo: edição do animal e gestão de fotos</li>
+    <li>Figura 19 – Painel administrativo: solicitações de adoção</li>
+    <li>Figura 20 – Painel administrativo: caixa de mensagens</li>
+  </ul>
+</section>
+
+<!-- ============ LISTA DE TABELAS ============ -->
+<section class="pre texto">
+  <h2>LISTA DE TABELAS</h2>
+  <ul class="lista">
+    <li>Tabela 1 – Perfil da Associação Focinho Amigo</li>
+    <li>Tabela 2 – Dores levantadas e resposta do sistema</li>
+    <li>Tabela 3 – Comparativo das tecnologias avaliadas</li>
+    <li>Tabela 4 – Fases do projeto</li>
+    <li>Tabela 5 – Situação dos requisitos funcionais por módulo</li>
+    <li>Tabela 6 – Requisitos funcionais implementados</li>
+    <li>Tabela 7 – Requisitos não funcionais</li>
+    <li>Tabela 8 – Estrutura da tabela <i>animals</i></li>
+    <li>Tabela 9 – Estrutura da tabela <i>adoption_requests</i></li>
+    <li>Tabela 10 – Estrutura das tabelas <i>users</i>, <i>animal_photos</i> e <i>contact_messages</i></li>
+    <li>Tabela 11 – Endpoints da API REST</li>
+    <li>Tabela 12 – Serviços do Docker Compose</li>
+    <li>Tabela 13 – Fluxo de uma adoção no sistema</li>
+    <li>Tabela 14 – Casos de teste da API</li>
+    <li>Tabela 15 – Objetivos alcançados</li>
+  </ul>
+</section>
+
+<!-- ============ SUMÁRIO ============ -->
+<section class="pre texto">
+  <h2>SUMÁRIO</h2>
+  <ul class="sumario">
+    <!--SUMARIO-->
+    <li class="n1"><span class="t">1. INTRODUÇÃO</span><span class="dots"></span><span class="pg">12</span></li>
+    <li class="n2"><span class="t">1.1 Motivação</span><span class="dots"></span><span class="pg">12</span></li>
+    <li class="n2"><span class="t">1.2 Objetivos</span><span class="dots"></span><span class="pg">13</span></li>
+    <li class="n3"><span class="t">1.2.1 Objetivo Geral</span><span class="dots"></span><span class="pg">13</span></li>
+    <li class="n3"><span class="t">1.2.2 Objetivos Específicos</span><span class="dots"></span><span class="pg">13</span></li>
+    <li class="n1"><span class="t">2. ESTUDO DE CASO: ASSOCIAÇÃO FOCINHO AMIGO</span><span class="dots"></span><span class="pg">14</span></li>
+    <li class="n2"><span class="t">2.1 Histórico da organização</span><span class="dots"></span><span class="pg">14</span></li>
+    <li class="n2"><span class="t">2.2 A operação hoje</span><span class="dots"></span><span class="pg">15</span></li>
+    <li class="n2"><span class="t">2.3 Problemas identificados</span><span class="dots"></span><span class="pg">16</span></li>
+    <li class="n2"><span class="t">2.4 Do problema aos requisitos</span><span class="dots"></span><span class="pg">16</span></li>
+    <li class="n1"><span class="t">3. FUNDAMENTAÇÃO TEÓRICA</span><span class="dots"></span><span class="pg">18</span></li>
+    <li class="n2"><span class="t">3.1 Gestão de ONGs de proteção animal</span><span class="dots"></span><span class="pg">18</span></li>
+    <li class="n2"><span class="t">3.2 JavaScript e Node.js</span><span class="dots"></span><span class="pg">18</span></li>
+    <li class="n2"><span class="t">3.3 Express</span><span class="dots"></span><span class="pg">18</span></li>
+    <li class="n2"><span class="t">3.4 React e Vite</span><span class="dots"></span><span class="pg">19</span></li>
+    <li class="n2"><span class="t">3.5 PostgreSQL</span><span class="dots"></span><span class="pg">19</span></li>
+    <li class="n2"><span class="t">3.6 Knex e migrations</span><span class="dots"></span><span class="pg">19</span></li>
+    <li class="n2"><span class="t">3.7 Docker e Docker Compose</span><span class="dots"></span><span class="pg">19</span></li>
+    <li class="n2"><span class="t">3.8 Proxmox VE e containers LXC</span><span class="dots"></span><span class="pg">20</span></li>
+    <li class="n2"><span class="t">3.9 Autenticação com JWT e bcrypt</span><span class="dots"></span><span class="pg">20</span></li>
+    <li class="n2"><span class="t">3.10 Critérios de escolha tecnológica</span><span class="dots"></span><span class="pg">20</span></li>
+    <li class="n1"><span class="t">4. METODOLOGIA</span><span class="dots"></span><span class="pg">22</span></li>
+    <li class="n2"><span class="t">4.1 Fases do projeto</span><span class="dots"></span><span class="pg">22</span></li>
+    <li class="n2"><span class="t">4.2 Ferramentas utilizadas</span><span class="dots"></span><span class="pg">22</span></li>
+    <li class="n2"><span class="t">4.3 Organização do repositório</span><span class="dots"></span><span class="pg">23</span></li>
+    <li class="n1"><span class="t">5. ESPECIFICAÇÃO DE REQUISITOS</span><span class="dots"></span><span class="pg">24</span></li>
+    <li class="n2"><span class="t">5.1 Perfis de acesso</span><span class="dots"></span><span class="pg">24</span></li>
+    <li class="n2"><span class="t">5.2 Requisitos funcionais</span><span class="dots"></span><span class="pg">24</span></li>
+    <li class="n2"><span class="t">5.3 Requisitos não funcionais</span><span class="dots"></span><span class="pg">26</span></li>
+    <li class="n2"><span class="t">5.4 Regras de negócio</span><span class="dots"></span><span class="pg">26</span></li>
+    <li class="n1"><span class="t">6. MODELAGEM E BANCO DE DADOS</span><span class="dots"></span><span class="pg">27</span></li>
+    <li class="n2"><span class="t">6.1 Modelo de domínio</span><span class="dots"></span><span class="pg">27</span></li>
+    <li class="n2"><span class="t">6.2 Tabelas implementadas</span><span class="dots"></span><span class="pg">27</span></li>
+    <li class="n2"><span class="t">6.3 Diagramas de estados</span><span class="dots"></span><span class="pg">29</span></li>
+    <li class="n1"><span class="t">7. ARQUITETURA DO SISTEMA</span><span class="dots"></span><span class="pg">30</span></li>
+    <li class="n2"><span class="t">7.1 Camadas</span><span class="dots"></span><span class="pg">30</span></li>
+    <li class="n2"><span class="t">7.2 API REST</span><span class="dots"></span><span class="pg">31</span></li>
+    <li class="n1"><span class="t">8. INFRAESTRUTURA DE IMPLANTAÇÃO</span><span class="dots"></span><span class="pg">32</span></li>
+    <li class="n2"><span class="t">8.1 Container LXC</span><span class="dots"></span><span class="pg">32</span></li>
+    <li class="n2"><span class="t">8.2 Serviços do Docker Compose</span><span class="dots"></span><span class="pg">33</span></li>
+    <li class="n2"><span class="t">8.3 HTTPS e backups</span><span class="dots"></span><span class="pg">33</span></li>
+    <li class="n1"><span class="t">9. FUNCIONALIDADES E INTERFACES</span><span class="dots"></span><span class="pg">34</span></li>
+    <li class="n2"><span class="t">9.1 Site público</span><span class="dots"></span><span class="pg">34</span></li>
+    <li class="n3"><span class="t">9.1.1 Página inicial</span><span class="dots"></span><span class="pg">34</span></li>
+    <li class="n3"><span class="t">9.1.2 Vitrine de adoção</span><span class="dots"></span><span class="pg">35</span></li>
+    <li class="n3"><span class="t">9.1.3 Página do animal e candidatura</span><span class="dots"></span><span class="pg">36</span></li>
+    <li class="n3"><span class="t">9.1.4 Como ajudar</span><span class="dots"></span><span class="pg">38</span></li>
+    <li class="n3"><span class="t">9.1.5 Versão para celular</span><span class="dots"></span><span class="pg">39</span></li>
+    <li class="n2"><span class="t">9.2 Área administrativa</span><span class="dots"></span><span class="pg">40</span></li>
+    <li class="n3"><span class="t">9.2.1 Login</span><span class="dots"></span><span class="pg">40</span></li>
+    <li class="n3"><span class="t">9.2.2 Gestão de animais</span><span class="dots"></span><span class="pg">41</span></li>
+    <li class="n3"><span class="t">9.2.3 Solicitações de adoção</span><span class="dots"></span><span class="pg">42</span></li>
+    <li class="n3"><span class="t">9.2.4 Caixa de mensagens</span><span class="dots"></span><span class="pg">43</span></li>
+    <li class="n2"><span class="t">9.3 Fluxo completo de uma adoção</span><span class="dots"></span><span class="pg">44</span></li>
+    <li class="n1"><span class="t">10. SEGURANÇA</span><span class="dots"></span><span class="pg">45</span></li>
+    <li class="n2"><span class="t">10.1 Segurança em rede</span><span class="dots"></span><span class="pg">45</span></li>
+    <li class="n2"><span class="t">10.2 Segurança da aplicação</span><span class="dots"></span><span class="pg">45</span></li>
+    <li class="n1"><span class="t">11. TESTES E RESULTADOS</span><span class="dots"></span><span class="pg">46</span></li>
+    <li class="n2"><span class="t">11.1 Testes realizados</span><span class="dots"></span><span class="pg">46</span></li>
+    <li class="n2"><span class="t">11.2 Objetivos alcançados</span><span class="dots"></span><span class="pg">47</span></li>
+    <li class="n2"><span class="t">11.3 Desafios enfrentados</span><span class="dots"></span><span class="pg">47</span></li>
+    <li class="n2"><span class="t">11.4 Trabalhos futuros</span><span class="dots"></span><span class="pg">47</span></li>
+    <li class="n1"><span class="t">12. CONCLUSÃO</span><span class="dots"></span><span class="pg">49</span></li>
+    <li class="n1"><span class="t">REFERÊNCIAS</span><span class="dots"></span><span class="pg">50</span></li>
+  </ul>
+</section>
+
+<!-- ============ 1. INTRODUÇÃO ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s1">1. INTRODUÇÃO</h1>
+  <p>O Brasil tem uma das maiores populações de animais de estimação do mundo e, ao mesmo tempo, um contingente expressivo de cães e gatos em situação de abandono. Entre o animal na rua e a família que o adota existe, quase sempre, uma organização da sociedade civil — muitas vezes pequena, mantida por voluntários e por doações de pessoas físicas — que resgata, trata, castra, vacina e procura um novo lar para cada um deles.</p>
+  <p>Essas organizações lidam diariamente com um volume grande de informações: o histórico de saúde de dezenas de animais, candidaturas de adoção que chegam por vários canais, denúncias de maus-tratos, ofertas de doação e de voluntariado, e a prestação de contas aos doadores. Na maior parte dos casos, esse controle é feito em cadernos, planilhas e conversas de aplicativos de mensagem, o que leva à perda de informação justamente nos momentos em que ela é mais necessária.</p>
+  <p>O presente trabalho documenta o desenvolvimento do <b>Resgate Animal</b>, um sistema web criado para resolver esse problema. Ele une, em uma única aplicação, o site público da ONG e uma área administrativa de gestão. Para guiar as decisões de projeto, foi construído um estudo de caso fictício, a <b>Associação Focinho Amigo</b>, apresentado no Capítulo 2.</p>
+  <p>O projeto foi desenvolvido integralmente em JavaScript — Node.js no servidor e React no navegador — com PostgreSQL como banco de dados relacional, e foi preparado para ser hospedado em um servidor de virtualização Proxmox VE, com os serviços executando em containers Docker dentro de um container LXC.</p>
+  <p>Este relatório apresenta o estudo de caso, a fundamentação teórica das escolhas tecnológicas, a metodologia, a especificação de requisitos, a modelagem do banco de dados, a arquitetura, a infraestrutura de implantação, as telas do sistema, os aspectos de segurança, os testes realizados e os resultados obtidos.</p>
+
+  <h2 id="s1-1">1.1 Motivação</h2>
+  <p>Durante o levantamento para o estudo de caso, ficou claro que o maior obstáculo dessas ONGs não é a falta de vontade, mas a falta de ferramenta. Sistemas de gestão comerciais são caros e pensados para clínicas veterinárias ou <i>pet shops</i>; planilhas genéricas não impõem regra alguma. O resultado são situações como duas famílias convidadas a adotar o mesmo animal, vacinas que vencem sem que ninguém perceba e doadores que deixam de contribuir por não receber notícias de onde foi parar o dinheiro.</p>
+  <p>A criação do Resgate Animal surgiu da necessidade de oferecer a essas organizações uma solução de código aberto, de baixo custo operacional, que possa ser hospedada em infraestrutura própria ou cedida por parceiros, e que cresça junto com a ONG: começando pelo que dá visibilidade e traz adoções — o site e a vitrine — e evoluindo para prontuário, finanças e voluntariado.</p>
+
+  <h2 id="s1-2">1.2 Objetivos</h2>
+  <h3 id="s1-2-1">1.2.1 Objetivo Geral</h3>
+  <p>Especificar, desenvolver e preparar para implantação um sistema web que divulgue os animais disponíveis para adoção e digitalize o ciclo de vida do animal dentro de uma ONG de resgate, do resgate ao acompanhamento pós-adoção.</p>
+  <h3 id="s1-2-2">1.2.2 Objetivos Específicos</h3>
+  <ul class="marcadores">
+    <li>Construir um site público responsivo com vitrine de animais, filtros, página individual e formulário de candidatura à adoção.</li>
+    <li>Oferecer um canal único de contato para voluntariado, doação, denúncia e dúvidas gerais.</li>
+    <li>Implementar uma API REST em Node.js com validação de entrada, autenticação por token e senhas armazenadas como <i>hash</i>.</li>
+    <li>Modelar e persistir os dados em PostgreSQL, com o esquema versionado por <i>migrations</i>.</li>
+    <li>Empacotar a aplicação em containers Docker e documentar a implantação em LXC no Proxmox VE, incluindo backups.</li>
+    <li>Produzir a especificação completa do produto (requisitos, regras de negócio e diagramas) para orientar as próximas fases.</li>
+  </ul>
+</section>
+
+<!-- ============ 2. ESTUDO DE CASO ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s2">2. ESTUDO DE CASO: ASSOCIAÇÃO FOCINHO AMIGO</h1>
+  <div class="caixa"><div class="rotulo">Atenção</div>A organização, as pessoas e os números deste capítulo são fictícios. Eles foram criados a partir de situações comuns relatadas por voluntários de proteção animal, para dar concretude aos requisitos do sistema.</div>
+
+  <h2 id="s2-1">2.1 Histórico da organização</h2>
+  <p>A Associação Focinho Amigo nasceu em uma noite chuvosa de março de 2017, quando a veterinária aposentada <b>Marta Albuquerque</b> encontrou uma cadela atropelada no acostamento da Rodovia Mogi-Bertioga, em Mogi das Cruzes (SP). A cadela, batizada de Estrela, sobreviveu depois de duas cirurgias pagas com uma "vaquinha" entre vizinhos. Em poucas semanas, a garagem de Marta abrigava outros seis animais, e a vaquinha virou uma associação formalizada no fim daquele ano.</p>
+  <p>Em 2019, com o apoio de um empresário local, a ONG passou a ocupar uma chácara cedida no bairro de Jundiapeba, onde funciona até hoje. A pandemia de 2020–2021 aumentou o número de abandonos e, também, o de pessoas dispostas a ajudar: a página da ONG no Instagram passou de mil para dez mil seguidores, e o volume de mensagens se tornou impossível de acompanhar pelo celular de uma só pessoa.</p>
+
+  <figure>
+    <ol class="linha-tempo">
+      <li><span class="ano">2017</span><span class="ponto"></span><span class="txt"><b>Resgate da Estrela e fundação</b>Associação formalizada em dezembro, com 11 voluntários.</span></li>
+      <li><span class="ano">2019</span><span class="ponto"></span><span class="txt"><b>Chácara em Jundiapeba</b>Capacidade passa de 15 para 70 animais.</span></li>
+      <li><span class="ano">2021</span><span class="ponto"></span><span class="txt"><b>Pico de abandonos na pandemia</b>Instagram chega a 10 mil seguidores; pedidos de adoção chegam por quatro canais diferentes.</span></li>
+      <li><span class="ano">2023</span><span class="ponto"></span><span class="txt"><b>Programa de apadrinhamento</b>Padrinhos passam a custear mensalmente a ração e a saúde de um animal.</span></li>
+      <li><span class="ano">2025</span><span class="ponto"></span><span class="txt"><b>Surto de cinomose</b>Três animais adoecem com a vacina vencida; a falta de controle se torna urgente.</span></li>
+      <li><span class="ano">2026</span><span class="ponto"></span><span class="txt"><b>Projeto Resgate Animal</b>Início do desenvolvimento do sistema, em parceria com a universidade.</span></li>
+    </ol>
+    <figcaption><b>Figura 1</b> – Linha do tempo da Associação Focinho Amigo <span class="fonte">Fonte: Elaborado pelos autores (2026), dados fictícios.</span></figcaption>
+  </figure>
+
+  <h2 id="s2-2">2.2 A operação hoje</h2>
+  <p>Atualmente a associação abriga em média 60 animais, entre cães e gatos. A equipe é formada por dois funcionários contratados (tratadora e auxiliar de limpeza), a veterinária parceira <b>Dra. Camila Torres</b>, que atende duas vezes por semana, e cerca de 30 voluntários coordenados por <b>Rafael Nunes</b>. A receita vem de doações de pessoas físicas, de 42 padrinhos mensais e de um bazar beneficente realizado a cada dois meses.</p>
+
+  <div class="numeros">
+    <div class="numero"><b>60</b><span>animais abrigados em média</span></div>
+    <div class="numero"><b>8,4</b><span>adoções por mês (média 2026)</span></div>
+    <div class="numero"><b>30</b><span>voluntários ativos</span></div>
+    <div class="numero"><b>42</b><span>padrinhos mensais</span></div>
+    <div class="numero"><b>12 mil</b><span>seguidores no Instagram</span></div>
+  </div>
+
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 1</b> – Perfil da Associação Focinho Amigo</div>
+    <table>
+      <thead><tr><th style="width:34%">Item</th><th>Situação</th></tr></thead>
+      <tbody>
+        <tr><td>Fundação</td><td>Dezembro de 2017, Mogi das Cruzes (SP)</td></tr>
+        <tr><td>Sede</td><td>Chácara cedida em Jundiapeba, capacidade para 70 animais</td></tr>
+        <tr><td>Equipe</td><td>2 funcionários, 1 veterinária parceira, ~30 voluntários</td></tr>
+        <tr><td>Adoções acumuladas</td><td>612 animais desde a fundação</td></tr>
+        <tr><td>Fontes de receita</td><td>Doações de pessoa física, 42 padrinhos, bazar bimestral</td></tr>
+        <tr><td>Controle antes do sistema</td><td>Caderno de vacinação, planilha compartilhada, WhatsApp, Instagram e e-mail</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026), dados fictícios.</span>
+  </div>
+
+  <p>A Figura 2 mostra as adoções realizadas em 2026. O crescimento a partir de julho coincide com as feiras de adoção mensais em um shopping da cidade, que trazem visibilidade, mas também multiplicam as mensagens que precisam ser respondidas.</p>
+
+  <figure class="grafico">
+    <svg viewBox="0 0 640 250" role="img" aria-label="Gráfico de barras: adoções por mês de janeiro a outubro de 2026">
+      <g font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#4a4a4a">
+        <!-- grade recessiva -->
+        <g stroke="#ece6df" stroke-width="1">
+          <line x1="40" y1="200" x2="630" y2="200" stroke="#9a9a9a"/>
+          <line x1="40" y1="155" x2="630" y2="155"/>
+          <line x1="40" y1="110" x2="630" y2="110"/>
+          <line x1="40" y1="65" x2="630" y2="65"/>
+          <line x1="40" y1="20" x2="630" y2="20"/>
+        </g>
+        <g text-anchor="end" fill="#6e6e6e" font-size="10">
+          <text x="32" y="204">0</text><text x="32" y="159">3</text><text x="32" y="114">6</text><text x="32" y="69">9</text><text x="32" y="24">12</text>
+        </g>
+        <!-- barras: altura = valor x 15; topo arredondado ancorado na base -->
+        <g fill="#e8772e">
+          <path d="M52 200 V114 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M111 200 V99 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M170 200 V129 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M229 200 V84 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M288 200 V69 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M347 200 V99 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M406 200 V54 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M465 200 V39 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M524 200 V69 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+          <path d="M583 200 V24 a4 4 0 0 1 4 -4 h28 a4 4 0 0 1 4 4 V200 Z"/>
+        </g>
+        <!-- rótulos diretos seletivos: menor, maior e último mês -->
+        <g text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1f1f1f">
+          <text x="188" y="119">5</text><text x="601" y="14">12</text>
+        </g>
+        <g text-anchor="middle" fill="#6e6e6e" font-size="10.5">
+          <text x="70" y="218">jan</text><text x="129" y="218">fev</text><text x="188" y="218">mar</text><text x="247" y="218">abr</text><text x="306" y="218">mai</text>
+          <text x="365" y="218">jun</text><text x="424" y="218">jul</text><text x="483" y="218">ago</text><text x="542" y="218">set</text><text x="601" y="218">out</text>
+        </g>
+        <text x="335" y="242" text-anchor="middle" fill="#6e6e6e" font-size="10">Total no ano: 84 adoções · média de 8,4 por mês</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 2</b> – Adoções realizadas por mês em 2026 (janeiro a outubro) <span class="fonte">Fonte: Elaborado pelos autores (2026), dados fictícios.</span></figcaption>
+  </figure>
+
+  <h2 id="s2-3">2.3 Problemas identificados</h2>
+  <p>Em uma entrevista simulada com a coordenação, quatro situações se repetiram nos relatos e foram tratadas como as principais dores do projeto:</p>
+  <div class="citacao">"Em maio, prometemos o Thor para duas famílias no mesmo fim de semana. Uma falou comigo pelo Instagram, a outra com o Rafael pelo WhatsApp. Foi um constrangimento enorme."<cite>— Marta Albuquerque, presidente (personagem fictícia)</cite></div>
+  <div class="citacao">"Só descobrimos que a vacina tinha vencido quando três filhotes adoeceram de cinomose. O caderno estava em cima da geladeira, ninguém olhou."<cite>— Dra. Camila Torres, veterinária parceira (personagem fictícia)</cite></div>
+  <div class="citacao">"Chega denúncia de maus-tratos no direct às duas da manhã. Quando alguém vê, já se passaram três dias e a mensagem sumiu no meio de outras cem."<cite>— Rafael Nunes, coordenador de voluntários (personagem fictícia)</cite></div>
+  <div class="citacao">"Os padrinhos querem saber como está o afilhado e para onde vai o dinheiro. No fim do mês eu não consigo dizer quanto custou cada animal."<cite>— Marta Albuquerque, presidente (personagem fictícia)</cite></div>
+
+  <p>A Figura 3 resume a origem dos pedidos de adoção recebidos no primeiro semestre de 2026, antes do sistema. A dispersão em quatro canais explica boa parte dos problemas relatados.</p>
+
+  <figure class="grafico">
+    <svg viewBox="0 0 640 170" role="img" aria-label="Gráfico de barras horizontais: canais de origem dos pedidos de adoção">
+      <g font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#4a4a4a">
+        <g text-anchor="end" fill="#1f1f1f">
+          <text x="150" y="31">Instagram (direct)</text><text x="150" y="69">WhatsApp</text><text x="150" y="107">Presencial (feiras)</text><text x="150" y="145">E-mail</text>
+        </g>
+        <line x1="160" y1="10" x2="160" y2="158" stroke="#9a9a9a"/>
+        <!-- largura = percentual x 8 -->
+        <g fill="#e8772e">
+          <path d="M160 16 h372 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 h-372 Z"/>
+          <path d="M160 54 h236 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 h-236 Z"/>
+          <path d="M160 92 h108 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 h-108 Z"/>
+          <path d="M160 130 h52 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 h-52 Z"/>
+        </g>
+        <g fill="#1f1f1f" font-weight="bold" font-size="10.5">
+          <text x="544" y="31">47%</text><text x="408" y="69">30%</text><text x="280" y="107">16%</text><text x="224" y="145">7%</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 3</b> – Canais por onde chegavam os pedidos de adoção antes do sistema (1º semestre de 2026, 152 pedidos) <span class="fonte">Fonte: Elaborado pelos autores (2026), dados fictícios.</span></figcaption>
+  </figure>
+
+  <h2 id="s2-4">2.4 Do problema aos requisitos</h2>
+  <p>Cada dor foi traduzida em uma capacidade do sistema. A Tabela 2 mostra essa correspondência e indica quais respostas já estão implementadas nesta entrega e quais fazem parte das próximas fases.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 2</b> – Dores levantadas e resposta do sistema</div>
+    <table>
+      <thead><tr><th style="width:30%">Dor</th><th>Resposta do sistema</th><th style="width:17%">Situação</th></tr></thead>
+      <tbody>
+        <tr><td>Pedidos de adoção espalhados em quatro canais</td><td>Candidatura on-line na página de cada animal, centralizada em uma fila única no painel administrativo</td><td class="st ok">Implementado</td></tr>
+        <tr><td>Mesmo animal prometido a duas famílias</td><td>Status do animal visível para toda a equipe; regra RN05 (apenas uma candidatura aprovada por animal)</td><td class="st parcial">Parcial</td></tr>
+        <tr><td>Denúncias e ofertas de ajuda perdidas</td><td>Formulário de contato com tipo (denúncia, voluntariado, doação) e caixa de mensagens com controle de leitura</td><td class="st ok">Implementado</td></tr>
+        <tr><td>Vacinas vencidas sem alerta</td><td>Prontuário veterinário com cálculo de reforço e painel de pendências (RF13–RF15)</td><td class="st plan">Planejado</td></tr>
+        <tr><td>Falta de prestação de contas</td><td>Registro de doações e despesas, custo por animal e relatório mensal de transparência (RF27–RF32)</td><td class="st plan">Planejado</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+</section>
+
+<!-- ============ 3. FUNDAMENTAÇÃO ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s3">3. FUNDAMENTAÇÃO TEÓRICA</h1>
+  <p>Este capítulo apresenta os conceitos e as tecnologias que fundamentam o desenvolvimento e a implantação do Resgate Animal, das ferramentas de desenvolvimento aos componentes de infraestrutura.</p>
+
+  <h2 id="s3-1">3.1 Gestão de ONGs de proteção animal</h2>
+  <p>ONGs de proteção animal executam um ciclo bem definido: resgate, triagem clínica, tratamento, castração e vacinação, disponibilização para adoção, avaliação do adotante, entrega com termo de responsabilidade e acompanhamento pós-adoção. A adoção responsável depende de que esse ciclo seja registrado: o adotante precisa receber o histórico de saúde do animal, e a ONG precisa saber, meses depois, se o animal continua bem. Por serem mantidas por doações, essas organizações também precisam demonstrar transparência no uso dos recursos — o que exige registro sistemático de entradas e saídas.</p>
+  <p>O Resgate Animal modela esse ciclo como uma máquina de estados (Seção 6.3), garantindo que um animal só avance de etapa quando as condições forem atendidas.</p>
+
+  <h2 id="s3-2">3.2 JavaScript e Node.js</h2>
+  <p>JavaScript é a linguagem nativa dos navegadores e, desde o surgimento do Node.js em 2009, também uma linguagem de servidor amplamente utilizada. O Node.js executa JavaScript fora do navegador sobre o motor V8 e adota um modelo de entrada e saída não bloqueante, orientado a eventos, adequado a aplicações web que passam a maior parte do tempo esperando respostas de banco de dados e de rede.</p>
+  <p>Utilizar JavaScript nas duas pontas — servidor e interface — foi um requisito do projeto. Na prática, isso reduz a troca de contexto da equipe, permite compartilhar convenções e ferramentas (como o gerenciador de pacotes npm) e facilita que voluntários com conhecimento de desenvolvimento web contribuam com a manutenção. O projeto usa a versão 24 do Node.js e o padrão ES Modules (<code>import</code>/<code>export</code>).</p>
+
+  <h2 id="s3-3">3.3 Express</h2>
+  <p>O Express é o framework web mais difundido do ecossistema Node.js. Sua arquitetura é baseada em uma cadeia de <i>middlewares</i>: funções que recebem a requisição, podem modificá-la ou respondê-la, e repassam o controle para a próxima. Autenticação, limite de requisições, cabeçalhos de segurança e tratamento de erros são implementados como middlewares independentes, aplicados apenas às rotas que precisam deles. A versão 5, utilizada no projeto, trata nativamente exceções lançadas em funções assíncronas, encaminhando-as ao tratador de erros central.</p>
+
+  <h2 id="s3-4">3.4 React e Vite</h2>
+  <p>O React é uma biblioteca para construção de interfaces baseada em componentes: cada parte da tela (cartão de animal, formulário, tabela) é uma função que recebe dados e devolve a interface correspondente. O site do Resgate Animal é uma <i>Single Page Application</i> (SPA): o navegador carrega a aplicação uma vez e, a partir daí, troca de página sem recarregar, buscando apenas dados em JSON na API. A navegação entre páginas usa o React Router.</p>
+  <p>O Vite é a ferramenta de desenvolvimento e empacotamento. Em desenvolvimento, oferece recarga instantânea e repassa as chamadas <code>/api</code> para a API local; em produção, gera arquivos estáticos otimizados (cerca de 88 kB compactados), servidos pelo Nginx.</p>
+
+  <h2 id="s3-5">3.5 PostgreSQL</h2>
+  <p>O PostgreSQL é um sistema gerenciador de banco de dados objeto-relacional de código aberto, com origem no projeto POSTGRES da Universidade da Califórnia em Berkeley. Implementa integralmente as propriedades ACID (atomicidade, consistência, isolamento e durabilidade), controle de concorrência multiversão (MVCC), restrições de integridade, chaves estrangeiras com ações em cascata e tipos avançados como <code>jsonb</code> e vetores. No Resgate Animal, as restrições do próprio banco — <code>NOT NULL</code>, <code>CHECK</code> para os valores enumerados e chaves estrangeiras com <code>ON DELETE CASCADE</code> ou <code>SET NULL</code> — formam uma segunda camada de proteção, além da validação feita pela API.</p>
+
+  <h2 id="s3-6">3.6 Knex e migrations</h2>
+  <p>O Knex é um <i>query builder</i>: uma biblioteca que monta comandos SQL a partir de chamadas JavaScript, tratando a parametrização (e, portanto, prevenindo injeção de SQL) sem esconder o modelo relacional, como fazem os ORMs. Também oferece <i>migrations</i>: arquivos versionados que descrevem cada alteração do esquema, com funções <code>up</code> (aplicar) e <code>down</code> (desfazer). No projeto, as migrations são aplicadas automaticamente quando a API inicia, de modo que uma atualização do sistema nunca deixa o banco em versão incompatível com o código.</p>
+
+  <h2 id="s3-7">3.7 Docker e Docker Compose</h2>
+  <p>Docker é uma plataforma de containers: cada serviço é empacotado com suas dependências em uma imagem imutável e executado de forma isolada. O Docker Compose descreve, em um único arquivo, o conjunto de serviços da aplicação, suas redes, variáveis de ambiente e volumes persistentes, permitindo subir o sistema inteiro com um comando. Para uma ONG, isso significa que atualizar ou reinstalar o sistema não depende de conhecimento detalhado de cada componente.</p>
+
+  <h2 id="s3-8">3.8 Proxmox VE e containers LXC</h2>
+  <p>O Proxmox Virtual Environment é uma plataforma de virtualização de código aberto baseada em Debian, que gerencia máquinas virtuais (KVM) e containers de sistema (LXC) por uma interface web. Containers LXC compartilham o kernel do host e, por isso, consomem muito menos memória que máquinas virtuais. Com as opções <code>nesting</code> e <code>keyctl</code> habilitadas, um container LXC sem privilégios pode executar o Docker internamente — arranjo que combina a leveza do LXC, os backups por <i>snapshot</i> do Proxmox e a portabilidade do Docker Compose.</p>
+
+  <h2 id="s3-9">3.9 Autenticação com JWT e bcrypt</h2>
+  <p>O JSON Web Token (JWT, RFC 7519) é um formato de token assinado que carrega a identidade do usuário. Após o login, a API devolve um token com validade de oito horas, enviado pelo navegador no cabeçalho <code>Authorization</code> das requisições seguintes; como a assinatura é verificada a cada chamada, o servidor não precisa manter sessões em memória (modelo <i>stateless</i>). As senhas nunca são armazenadas em texto: o bcrypt gera um <i>hash</i> com <i>salt</i> aleatório e fator de custo configurável (12, no projeto), tornando ataques de força bruta computacionalmente caros, conforme recomendado pela OWASP.</p>
+
+  <h2 id="s3-10">3.10 Critérios de escolha tecnológica</h2>
+  <p>As tecnologias foram escolhidas a partir de quatro critérios: (i) restrição do projeto a JavaScript e PostgreSQL; (ii) custo de licença zero; (iii) maturidade e tamanho da comunidade, que facilitam a manutenção por voluntários; e (iv) aderência à infraestrutura disponível (Proxmox). A Tabela 3 resume as alternativas consideradas.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 3</b> – Comparativo das tecnologias avaliadas</div>
+    <table>
+      <thead><tr><th style="width:19%">Escolhida</th><th style="width:27%">Alternativas</th><th>Motivo da escolha</th></tr></thead>
+      <tbody>
+        <tr><td><b>Express 5</b></td><td>Fastify, NestJS</td><td>Mais simples e mais documentado; NestJS acrescenta estrutura demais para o porte do projeto</td></tr>
+        <tr><td><b>React + Vite</b></td><td>Vue, Angular, Next.js</td><td>Maior ecossistema; SPA estática servida por Nginx, sem servidor de renderização</td></tr>
+        <tr><td><b>Knex</b></td><td>Prisma, Sequelize, SQL puro</td><td>SQL explícito com parametrização e migrations em JavaScript, sem etapa de geração de código</td></tr>
+        <tr><td><b>zod</b></td><td>Joi, validação manual</td><td>Esquemas declarativos que validam e normalizam os dados (ex.: e-mail em minúsculas)</td></tr>
+        <tr><td><b>JWT</b></td><td>Sessão em cookie com armazenamento no servidor</td><td>API stateless, sem tabela de sessões; adequada a futuras integrações (app móvel)</td></tr>
+        <tr><td><b>bcrypt</b></td><td>Argon2, SHA-256</td><td>Hash adaptativo resistente a força bruta, implementação pura em JavaScript (bcryptjs)</td></tr>
+        <tr><td><b>Docker em LXC</b></td><td>VM dedicada, instalação direta no LXC</td><td>Menor consumo de memória que uma VM; implantação reproduzível com um comando</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+</section>
+
+<!-- ============ 4. METODOLOGIA ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s4">4. METODOLOGIA</h1>
+  <p>O desenvolvimento seguiu uma abordagem iterativa e incremental, organizada em sprints com entregas verificáveis. A primeira iteração priorizou o que gera valor imediato para a ONG — visibilidade e adoções — e a infraestrutura necessária para colocar o sistema no ar; as funcionalidades de gestão interna foram especificadas em detalhe e planejadas para as iterações seguintes.</p>
+
+  <h2 id="s4-1">4.1 Fases do projeto</h2>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 4</b> – Fases do projeto</div>
+    <table>
+      <thead><tr><th style="width:21%">Fase</th><th>Atividades</th><th style="width:28%">Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>0 – Levantamento</td><td>Construção do estudo de caso, entrevista simulada, definição da stack (JavaScript + PostgreSQL + Proxmox)</td><td>Problemas e restrições documentados</td></tr>
+        <tr><td>1 – Fundação</td><td>Estrutura do repositório, API REST, modelo de dados inicial, site público, painel administrativo, upload de fotos</td><td>Aplicação funcional em ambiente local</td></tr>
+        <tr><td>2 – Infraestrutura</td><td>Dockerfiles, Docker Compose, configuração do Nginx, script de backup, roteiro de implantação em LXC</td><td>Implantação reproduzível com um comando</td></tr>
+        <tr><td>3 – Testes</td><td>31 casos de teste de ponta a ponta na API, verificação manual das telas no navegador, correção de defeitos</td><td>Sistema validado localmente</td></tr>
+        <tr><td>4 – Especificação</td><td>Requisitos funcionais e não funcionais, regras de negócio, modelo de domínio completo, cronograma</td><td>Especificação no README</td></tr>
+        <tr><td>5 – Documentação</td><td>Diagramas em draw.io, capturas de tela, este relatório</td><td>Relatório final</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+
+  <h2 id="s4-2">4.2 Ferramentas utilizadas</h2>
+  <ul class="marcadores">
+    <li><b>Visual Studio Code</b> — editor de código.</li>
+    <li><b>Git</b> — controle de versão, com histórico de commits descritivos.</li>
+    <li><b>Node.js 24 e npm</b> — execução da API e gerenciamento de dependências.</li>
+    <li><b>PostgreSQL 18</b> — banco local de desenvolvimento e banco de produção.</li>
+    <li><b>Docker e Docker Compose</b> — empacotamento e orquestração dos serviços.</li>
+    <li><b>Proxmox VE</b> — plataforma de virtualização de destino.</li>
+    <li><b>draw.io (diagrams.net)</b> — diagramas de domínio, estados, arquitetura e implantação.</li>
+    <li><b>Navegador com ferramentas de desenvolvedor</b> — verificação das telas, das requisições e da versão para celular.</li>
+  </ul>
+
+  <h2 id="s4-3">4.3 Organização do repositório</h2>
+  <p>O código está organizado em duas aplicações independentes dentro do mesmo repositório: <code>api/</code> (servidor) e <code>web/</code> (interface), além de <code>docs/</code> (diagramas e este relatório) e <code>scripts/</code> (backup). A especificação completa do produto fica no <code>README.md</code>, que marca cada requisito como implementado, parcial ou planejado e serve como fonte única de verdade sobre o estado do projeto.</p>
+</section>
+
+<!-- ============ 5. REQUISITOS ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s5">5. ESPECIFICAÇÃO DE REQUISITOS</h1>
+  <p>A especificação cobre o produto completo, e não apenas o que foi implementado nesta entrega. Essa escolha permite que a ONG — e futuros desenvolvedores — saibam exatamente o que o sistema já faz, o que faz parcialmente e o que está previsto.</p>
+
+  <h2 id="s5-1">5.1 Perfis de acesso</h2>
+  <p>Foram definidos quatro perfis: <b>visitante</b> (público em geral, sem login), <b>admin</b> (coordenação da ONG, acesso total), <b>veterinário</b> (escrita no prontuário) e <b>voluntário</b> (tarefas da própria escala). Nesta entrega estão implementados o visitante e o administrador; os perfis veterinário e voluntário dependem dos módulos de prontuário e voluntariado.</p>
+
+  <h2 id="s5-2">5.2 Requisitos funcionais</h2>
+  <p>Foram especificados 39 requisitos funcionais, organizados em seis módulos. A Tabela 5 apresenta a situação de cada módulo e a Tabela 6 detalha os requisitos já atendidos, total ou parcialmente.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 5</b> – Situação dos requisitos funcionais por módulo</div>
+    <table>
+      <thead><tr><th>Módulo</th><th class="num">Requisitos</th><th class="num">Implementados</th><th class="num">Parciais</th><th class="num">Planejados</th></tr></thead>
+      <tbody>
+        <tr><td>Site público e contato (RF01–RF04)</td><td class="num">4</td><td class="num">4</td><td class="num">0</td><td class="num">0</td></tr>
+        <tr><td>Autenticação e administração (RF05–RF08)</td><td class="num">4</td><td class="num">1</td><td class="num">0</td><td class="num">3</td></tr>
+        <tr><td>Animais e prontuário (RF09–RF17)</td><td class="num">9</td><td class="num">0</td><td class="num">4</td><td class="num">5</td></tr>
+        <tr><td>Adoção (RF18–RF26)</td><td class="num">9</td><td class="num">1</td><td class="num">2</td><td class="num">6</td></tr>
+        <tr><td>Doações e despesas (RF27–RF32)</td><td class="num">6</td><td class="num">0</td><td class="num">0</td><td class="num">6</td></tr>
+        <tr><td>Voluntários e apadrinhamento (RF33–RF39)</td><td class="num">7</td><td class="num">0</td><td class="num">0</td><td class="num">7</td></tr>
+        <tr><td><b>Total</b></td><td class="num"><b>39</b></td><td class="num"><b>6</b></td><td class="num"><b>6</b></td><td class="num"><b>27</b></td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 6</b> – Requisitos funcionais implementados</div>
+    <table>
+      <thead><tr><th style="width:8%">ID</th><th>Requisito</th><th style="width:30%">Situação</th></tr></thead>
+      <tbody>
+        <tr><td>RF01</td><td>Página inicial com chamada para adoção e animais disponíveis</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RF02</td><td>Página "Como ajudar" com doação (PIX), voluntariado e denúncia</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RF03</td><td>Envio de mensagem de contato, voluntariado, doação ou denúncia</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RF04</td><td>Caixa de mensagens com marcação de leitura</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RF05</td><td>Login com e-mail e senha</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RF09</td><td>Cadastro completo do animal</td><td><span class="st parcial">Parcial</span> — sem raça, cor e data de nascimento</td></tr>
+        <tr><td>RF10</td><td>Fotos do animal com foto principal</td><td><span class="st parcial">Parcial</span> — a primeira foto é a capa</td></tr>
+        <tr><td>RF12</td><td>Status do animal com fluxo controlado</td><td><span class="st parcial">Parcial</span> — sem validação de transição</td></tr>
+        <tr><td>RF16</td><td>Busca e filtros de animais</td><td><span class="st parcial">Parcial</span> — espécie, sexo, porte e status</td></tr>
+        <tr><td>RF18</td><td>Vitrine pública dos animais disponíveis</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RF19</td><td>Candidatura de adoção pelo visitante</td><td><span class="st parcial">Parcial</span> — nome, contato, cidade e mensagem</td></tr>
+        <tr><td>RF20</td><td>Processo de adoção por estados</td><td><span class="st parcial">Parcial</span> — pendente, aprovado, recusado</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026). Lista completa no README do repositório.</span>
+  </div>
+
+  <h2 id="s5-3">5.3 Requisitos não funcionais</h2>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 7</b> – Requisitos não funcionais</div>
+    <table>
+      <thead><tr><th style="width:9%">ID</th><th>Requisito</th><th style="width:15%">Situação</th></tr></thead>
+      <tbody>
+        <tr><td>RNF01</td><td>Aplicação inteira em JavaScript (Node.js no servidor, React no navegador)</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF02</td><td>Banco de dados PostgreSQL</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF03</td><td>Senhas armazenadas com hash bcrypt</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF04</td><td>API stateless com JWT e validação de toda entrada por esquemas</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF05</td><td>Esquema versionado por migrations aplicadas na inicialização</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF06</td><td>Execução com um comando via Docker Compose, implantável em LXC no Proxmox</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF07</td><td>Limite de requisições por IP em formulários públicos e login</td><td class="st ok">Atendido</td></tr>
+        <tr><td>RNF08</td><td>95% das listagens em menos de 2 s com 1.000 animais</td><td class="st plan">A medir</td></tr>
+        <tr><td>RNF09</td><td>Cobertura mínima de 60% de testes na camada de serviço</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RNF10</td><td>Imagens redimensionadas para até 1280 px e 500 KB</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RNF11</td><td>Conformidade com a LGPD (consentimento e anonimização)</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RNF12</td><td>Interface responsiva e acessível</td><td class="st parcial">Parcial</td></tr>
+        <tr><td>RNF13</td><td>Backup diário do banco e das fotos, retenção de 14 dias</td><td class="st ok">Atendido</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+
+  <h2 id="s5-4">5.4 Regras de negócio</h2>
+  <p>Dez regras de negócio orientam o comportamento do sistema. As mais relevantes para esta entrega são:</p>
+  <ul class="marcadores">
+    <li><b>RN02 — Bloqueio de adoção:</b> só recebem candidaturas animais com status <code>disponivel</code> ou <code>em_processo</code>. A API recusa candidaturas para animais adotados ou em tratamento (implementado).</li>
+    <li><b>RN03 e RN04 — Estados do animal e da adoção:</b> transições fora do grafo definido devem ser rejeitadas (Seção 6.3).</li>
+    <li><b>RN05 — Exclusividade:</b> um animal pode ter várias candidaturas, mas só uma aprovada; aprovar uma cancela as demais. É a resposta direta ao episódio do Thor.</li>
+    <li><b>RN07 — Alerta de pendência:</b> itens do prontuário a 30 dias ou menos do vencimento são "a vencer"; com a data ultrapassada, "vencidos".</li>
+    <li><b>RN09 — Exclusão lógica:</b> registros de animais, adoções e finanças nunca são apagados fisicamente, para preservar o histórico.</li>
+  </ul>
+</section>
+
+<!-- ============ 6. MODELAGEM ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s6">6. MODELAGEM E BANCO DE DADOS</h1>
+  <p>O banco de dados do Resgate Animal é gerenciado pelo PostgreSQL 18. O modelo completo prevê 14 tabelas; nesta entrega, cinco estão implementadas e em uso: <code>users</code>, <code>animals</code>, <code>animal_photos</code>, <code>adoption_requests</code> e <code>contact_messages</code>.</p>
+
+  <h2 id="s6-1">6.1 Modelo de domínio</h2>
+  <p>A Figura 4 apresenta o modelo completo. As cores identificam os módulos: roxo para acesso e voluntariado, verde para animais e prontuário, laranja para adoção, azul para financeiro e apadrinhamento e cinza para o site público. O símbolo ◆ marca a chave primária e ◇ as chaves estrangeiras.</p>
+  <figure>
+    <img class="sem-borda" src="img/diagrama-dominio.png" alt="Diagrama do modelo de domínio">
+    <figcaption><b>Figura 4</b> – Modelo de domínio (tabelas e relacionamentos) <span class="fonte">Fonte: Elaborado pelos autores (2026), docs/diagramas.drawio.</span></figcaption>
+  </figure>
+
+  <h2 id="s6-2">6.2 Tabelas implementadas</h2>
+  <p>A tabela <code>animals</code> é a entidade central do sistema. Os campos enumerados (espécie, sexo, porte e status) são protegidos por restrições <code>CHECK</code> criadas pela migration, de modo que nem mesmo um comando SQL manual consegue gravar um valor inválido.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 8</b> – Estrutura da tabela <i>animals</i></div>
+    <table>
+      <thead><tr><th style="width:19%">Coluna</th><th style="width:15%">Tipo</th><th style="width:21%">Restrição</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>serial</td><td>PK</td><td>Identificador do animal</td></tr>
+        <tr><td><code>name</code></td><td>varchar(100)</td><td>NOT NULL</td><td>Nome dado pela ONG</td></tr>
+        <tr><td><code>species</code></td><td>text</td><td>CHECK</td><td><code>cachorro</code>, <code>gato</code> ou <code>outro</code></td></tr>
+        <tr><td><code>sex</code></td><td>text</td><td>CHECK</td><td><code>macho</code> ou <code>femea</code></td></tr>
+        <tr><td><code>size</code></td><td>text</td><td>CHECK</td><td><code>pequeno</code>, <code>medio</code> ou <code>grande</code></td></tr>
+        <tr><td><code>age_months</code></td><td>integer</td><td>nullable</td><td>Idade aproximada em meses</td></tr>
+        <tr><td><code>description</code></td><td>text</td><td>NOT NULL</td><td>História e temperamento, exibidos no site</td></tr>
+        <tr><td><code>health_notes</code></td><td>text</td><td>NOT NULL</td><td>Observações de saúde</td></tr>
+        <tr><td><code>neutered</code>, <code>vaccinated</code></td><td>boolean</td><td>NOT NULL</td><td>Castrado e vacinado</td></tr>
+        <tr><td><code>status</code></td><td>text</td><td>CHECK, índice</td><td><code>disponivel</code>, <code>em_processo</code>, <code>adotado</code>, <code>em_tratamento</code></td></tr>
+        <tr><td><code>rescued_at</code></td><td>date</td><td>nullable</td><td>Data do resgate</td></tr>
+        <tr><td><code>created_at</code>, <code>updated_at</code></td><td>timestamptz</td><td>NOT NULL</td><td>Datas de criação e alteração</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026), api/migrations/001_init.js.</span>
+  </div>
+
+  <p>A tabela <code>adoption_requests</code> registra cada candidatura. A chave estrangeira para o animal usa <code>ON DELETE SET NULL</code>: se um animal for excluído, o histórico da candidatura é preservado — comportamento verificado nos testes (Seção 11).</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 9</b> – Estrutura da tabela <i>adoption_requests</i></div>
+    <table>
+      <thead><tr><th style="width:19%">Coluna</th><th style="width:15%">Tipo</th><th style="width:21%">Restrição</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>serial</td><td>PK</td><td>Identificador da candidatura</td></tr>
+        <tr><td><code>animal_id</code></td><td>integer</td><td>FK → animals, SET NULL</td><td>Animal pretendido</td></tr>
+        <tr><td><code>name</code>, <code>email</code>, <code>phone</code>, <code>city</code></td><td>varchar</td><td>NOT NULL</td><td>Dados do candidato</td></tr>
+        <tr><td><code>message</code></td><td>text</td><td>NOT NULL</td><td>Relato sobre a casa e a família</td></tr>
+        <tr><td><code>status</code></td><td>text</td><td>CHECK, índice</td><td><code>pendente</code>, <code>aprovado</code> ou <code>recusado</code></td></tr>
+        <tr><td><code>created_at</code>, <code>updated_at</code></td><td>timestamptz</td><td>NOT NULL</td><td>Datas de criação e alteração</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 10</b> – Estrutura das tabelas <i>users</i>, <i>animal_photos</i> e <i>contact_messages</i></div>
+    <table>
+      <thead><tr><th style="width:19%">Tabela</th><th style="width:36%">Colunas principais</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td><code>users</code></td><td><code>id</code>, <code>name</code>, <code>email</code> (único), <code>password_hash</code></td><td>Senha armazenada como hash bcrypt com custo 12; administrador inicial criado a partir de variáveis de ambiente</td></tr>
+        <tr><td><code>animal_photos</code></td><td><code>id</code>, <code>animal_id</code>, <code>filename</code>, <code>position</code></td><td>FK com <code>ON DELETE CASCADE</code>; o arquivo físico é removido junto com o registro</td></tr>
+        <tr><td><code>contact_messages</code></td><td><code>id</code>, <code>name</code>, <code>email</code>, <code>phone</code>, <code>type</code>, <code>message</code>, <code>read</code></td><td><code>type</code> restrito a contato, voluntário, doação ou denúncia</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+
+  <h2 id="s6-3">6.3 Diagramas de estados</h2>
+  <p>O ciclo de vida do animal e o processo de adoção foram modelados como máquinas de estados. As setas tracejadas representam retornos excepcionais — desistência e devolução —, que exigem justificativa.</p>
+  <figure>
+    <img class="sem-borda" src="img/diagrama-estados-animal.png" alt="Diagrama de estados do animal">
+    <figcaption><b>Figura 5</b> – Diagrama de estados do animal (RN03) <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+  <figure>
+    <img class="sem-borda" src="img/diagrama-fluxo-adocao.png" alt="Diagrama de estados do processo de adoção">
+    <figcaption><b>Figura 6</b> – Diagrama de estados do processo de adoção (RN04) <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+  <p>Nesta entrega, o animal já transita entre <code>disponivel</code>, <code>em_processo</code>, <code>adotado</code> e <code>em_tratamento</code>, e a candidatura entre <code>pendente</code>, <code>aprovado</code> e <code>recusado</code>. A migração para o grafo completo, com validação das transições na camada de serviço, está prevista para a sprint de adoção.</p>
+</section>
+
+<!-- ============ 7. ARQUITETURA ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s7">7. ARQUITETURA DO SISTEMA</h1>
+  <p>O Resgate Animal adota uma arquitetura em camadas, com duas aplicações JavaScript separadas: uma SPA React, servida como arquivos estáticos pelo Nginx, e uma API REST em Express, que concentra regras de negócio, autenticação e acesso ao banco. O PostgreSQL só é acessível pela API.</p>
+
+  <h2 id="s7-1">7.1 Camadas</h2>
+  <figure class="alta">
+    <img class="sem-borda" src="img/diagrama-camadas.png" alt="Arquitetura em camadas">
+    <figcaption><b>Figura 7</b> – Arquitetura em camadas da aplicação <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+  <p>A <b>apresentação</b> (React) nunca acessa o banco: toda comunicação ocorre por requisições HTTP com JSON. As <b>rotas REST</b> validam cada entrada com um esquema zod antes de qualquer operação, de forma que dados malformados são rejeitados com erro 400 e nunca chegam ao banco. Os <b>middlewares</b> transversais — autenticação JWT, limite de requisições e cabeçalhos de segurança (helmet) — são aplicados por rota. O <b>acesso a dados</b> usa o Knex, com consultas parametrizadas. O <b>domínio</b> concentra os valores enumerados em um único arquivo (<code>constants.js</code>), usado tanto pelas migrations quanto pela validação, para que banco e API nunca divirjam.</p>
+
+  <h2 id="s7-2">7.2 API REST</h2>
+  <p>A API segue os princípios REST: cada entidade é um recurso identificado por uma URI, manipulado pelos métodos HTTP padronizados, com respostas em JSON e códigos de status significativos (201 para criação, 204 para alteração sem conteúdo, 400 para dados inválidos, 401 para falta de autenticação, 404 para recurso inexistente). Os 16 endpoints implementados estão na Tabela 11.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 11</b> – Endpoints da API REST</div>
+    <table>
+      <thead><tr><th style="width:11%">Método</th><th style="width:31%">Rota</th><th style="width:13%">Acesso</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td>GET</td><td><code>/api/health</code></td><td>Público</td><td>Saúde da API e conexão com o banco</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/login</code></td><td>Público</td><td>Autentica e devolve o token JWT</td></tr>
+        <tr><td>GET</td><td><code>/api/auth/me</code></td><td>Admin</td><td>Dados do usuário autenticado</td></tr>
+        <tr><td>GET</td><td><code>/api/animals</code></td><td>Público</td><td>Lista com filtros por espécie, sexo, porte e status, com foto de capa</td></tr>
+        <tr><td>GET</td><td><code>/api/animals/{id}</code></td><td>Público</td><td>Detalhe do animal com todas as fotos</td></tr>
+        <tr><td>POST</td><td><code>/api/animals</code></td><td>Admin</td><td>Cadastra um animal</td></tr>
+        <tr><td>PUT</td><td><code>/api/animals/{id}</code></td><td>Admin</td><td>Atualiza um animal</td></tr>
+        <tr><td>DELETE</td><td><code>/api/animals/{id}</code></td><td>Admin</td><td>Exclui o animal e os arquivos de foto</td></tr>
+        <tr><td>POST</td><td><code>/api/animals/{id}/photos</code></td><td>Admin</td><td>Envia até 10 fotos (JPG, PNG, WEBP, até 5 MB)</td></tr>
+        <tr><td>DELETE</td><td><code>/api/animals/{id}/photos/{photoId}</code></td><td>Admin</td><td>Remove uma foto</td></tr>
+        <tr><td>POST</td><td><code>/api/adoptions</code></td><td>Público</td><td>Registra candidatura de adoção</td></tr>
+        <tr><td>GET</td><td><code>/api/adoptions</code></td><td>Admin</td><td>Fila de candidaturas, com filtro por status</td></tr>
+        <tr><td>PATCH</td><td><code>/api/adoptions/{id}</code></td><td>Admin</td><td>Aprova, recusa ou volta para pendente</td></tr>
+        <tr><td>POST</td><td><code>/api/contacts</code></td><td>Público</td><td>Envia mensagem de contato</td></tr>
+        <tr><td>GET</td><td><code>/api/contacts</code></td><td>Admin</td><td>Caixa de mensagens</td></tr>
+        <tr><td>PATCH</td><td><code>/api/contacts/{id}</code></td><td>Admin</td><td>Marca a mensagem como lida ou não lida</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+</section>
+
+<!-- ============ 8. INFRAESTRUTURA ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s8">8. INFRAESTRUTURA DE IMPLANTAÇÃO</h1>
+  <p>A infraestrutura foi projetada para um servidor Proxmox VE, plataforma comum em ONGs e pequenas empresas por não ter custo de licença. Toda a aplicação roda em um único container LXC, dentro do qual o Docker Compose executa três serviços. A Figura 8 apresenta a topologia.</p>
+  <figure>
+    <img class="sem-borda" src="img/diagrama-implantacao.png" alt="Topologia de implantação">
+    <figcaption><b>Figura 8</b> – Topologia de implantação no Proxmox VE <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h2 id="s8-1">8.1 Container LXC</h2>
+  <p>O container é criado a partir do template Debian 13, sem privilégios, com 2 vCPUs, 2 GB de memória e 20 GB de disco — suficiente para o porte de uma ONG como a do estudo de caso. As opções <code>nesting=1</code> e <code>keyctl=1</code> permitem que o Docker funcione dentro do LXC. Após instalar o Docker, a implantação se resume a clonar o repositório, preencher o arquivo <code>.env</code> e executar <code>docker compose up -d --build</code>.</p>
+
+  <h2 id="s8-2">8.2 Serviços do Docker Compose</h2>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 12</b> – Serviços do Docker Compose</div>
+    <table>
+      <thead><tr><th style="width:11%">Serviço</th><th style="width:22%">Imagem</th><th style="width:16%">Porta</th><th>Função</th></tr></thead>
+      <tbody>
+        <tr><td><code>web</code></td><td>nginx:1.29-alpine (multi-stage, build com node:24)</td><td>80 (única exposta)</td><td>Serve o React compilado e encaminha <code>/api</code> e <code>/uploads</code> para a API</td></tr>
+        <tr><td><code>api</code></td><td>node:24-alpine</td><td>3000 (interna)</td><td>API REST; aplica migrations e cria o administrador na inicialização; executa como usuário sem privilégios</td></tr>
+        <tr><td><code>db</code></td><td>postgres:18-alpine</td><td>5432 (interna)</td><td>Banco de dados; a API só inicia após o <i>healthcheck</i> do banco</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026), docker-compose.yml.</span>
+  </div>
+  <p>Os dados persistentes ficam em dois volumes nomeados: <code>db-data</code> (banco) e <code>uploads</code> (fotos). Assim, reconstruir ou atualizar os containers nunca apaga informações. Uma nova versão é publicada com <code>git pull</code> seguido de <code>docker compose up -d --build</code>; as migrations pendentes são aplicadas automaticamente.</p>
+
+  <h2 id="s8-3">8.3 HTTPS e backups</h2>
+  <p>O container serve HTTP na porta 80. Para publicação na internet, um proxy reverso com certificado Let's Encrypt — Nginx Proxy Manager ou Caddy em outro LXC, ou um Cloudflare Tunnel, que dispensa abrir portas no roteador — faz a terminação TLS e encaminha o tráfego ao container.</p>
+  <p>A proteção dos dados é feita em duas camadas: o script <code>scripts/backup.sh</code>, agendado no cron do LXC, gera diariamente um <i>dump</i> do banco (<code>pg_dump</code> em formato custom) e um arquivo compactado das fotos, mantendo os 14 últimos; e o backup do container inteiro pelo próprio Proxmox (<code>vzdump</code> em modo <i>snapshot</i>), que permite restaurar o servidor completo em minutos.</p>
+</section>
+
+<!-- ============ 9. FUNCIONALIDADES E INTERFACES ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s9">9. FUNCIONALIDADES E INTERFACES</h1>
+  <p>Esta seção apresenta as telas do sistema em execução, preenchido com os dados fictícios da Associação Focinho Amigo: nove animais, cinco candidaturas e quatro mensagens. A identidade visual usa tons quentes e cartões arredondados, para transmitir acolhimento, e todas as telas se adaptam a celulares.</p>
+
+  <h2 id="s9-1">9.1 Site público</h2>
+  <h3 id="s9-1-1">9.1.1 Página inicial</h3>
+  <p>A página inicial apresenta a missão da ONG, dois botões de ação ("Quero adotar" e "Quero ajudar"), os seis animais disponíveis mais recentes e os três pilares do trabalho: resgate, cuidado e adoção responsável.</p>
+  <figure class="alta">
+    <img src="img/01-inicio.png" alt="Página inicial">
+    <figcaption><b>Figura 9</b> – Página inicial do site <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-1-2">9.1.2 Vitrine de adoção</h3>
+  <p>A vitrine lista apenas os animais com status <code>disponivel</code>. Os filtros por espécie, sexo e porte ficam registrados na URL (por exemplo, <code>/adote?species=gato</code>), o que permite à ONG divulgar links prontos nas redes sociais, como "conheça nossos gatos".</p>
+  <figure class="media">
+    <img src="img/02-vitrine.png" alt="Vitrine de adoção">
+    <figcaption><b>Figura 10</b> – Vitrine de adoção com filtros <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+  <figure class="media">
+    <img src="img/03-vitrine-gatos.png" alt="Vitrine filtrada por gatos">
+    <figcaption><b>Figura 11</b> – Vitrine filtrada por espécie (gatos) <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-1-3">9.1.3 Página do animal e candidatura</h3>
+  <p>Cada animal tem uma página própria com galeria de fotos, ficha (espécie, sexo, porte, idade, castração e vacinação), sua história e as observações de saúde. Abaixo, o formulário "Quero adotar" coleta nome, e-mail, telefone, cidade e um relato sobre a casa. O envio cai diretamente na fila do painel administrativo, encerrando a dispersão entre canais descrita no estudo de caso.</p>
+  <figure class="alta">
+    <img src="img/04-detalhe.png" alt="Página do animal">
+    <figcaption><b>Figura 12</b> – Página do animal (Thor) com formulário de candidatura <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+  <figure class="media">
+    <img src="img/13-sucesso-adocao.png" alt="Confirmação de candidatura">
+    <figcaption><b>Figura 13</b> – Confirmação de envio da candidatura <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-1-4">9.1.4 Como ajudar</h3>
+  <p>A página "Como ajudar" reúne as três formas de apoio — doação por PIX, voluntariado e denúncia — e um formulário de contato com campo de assunto. As mensagens chegam classificadas na caixa de mensagens do painel, o que permite, por exemplo, identificar uma denúncia de imediato, sem que ela se perca entre pedidos de informação.</p>
+  <figure class="media">
+    <img src="img/05-ajude.png" alt="Como ajudar">
+    <figcaption><b>Figura 14</b> – Página "Como ajudar" com formulário de contato <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-1-5">9.1.5 Versão para celular</h3>
+  <p>Como a maior parte do público chega pelo Instagram, a interface foi construída para funcionar em telas pequenas: a grade de cartões passa a uma coluna, os formulários se reorganizam e o menu permanece acessível.</p>
+  <figure>
+    <div class="lado-a-lado">
+      <img src="img/11-celular-inicio.png" alt="Página inicial no celular">
+      <img src="img/12-celular-detalhe.png" alt="Página do animal no celular">
+    </div>
+    <figcaption><b>Figura 15</b> – Site em tela de celular: página inicial e página da gata Mel <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h2 id="s9-2">9.2 Área administrativa</h2>
+  <h3 id="s9-2-1">9.2.1 Login</h3>
+  <p>A área administrativa (<code>/admin</code>) exige login. Ao tentar acessá-la sem sessão, o usuário é levado à tela de login e, após autenticar, retorna à página que havia pedido. Quando o token expira, a aplicação descarta a sessão e volta para o login automaticamente.</p>
+  <figure class="media">
+    <img src="img/06-login.png" alt="Tela de login">
+    <figcaption><b>Figura 16</b> – Tela de login da área administrativa <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-2-2">9.2.2 Gestão de animais</h3>
+  <p>A lista mostra todos os animais, de qualquer status, com acesso à edição e à exclusão. O editor reúne todos os campos da ficha e a gestão de fotos: envio de várias imagens de uma vez e remoção individual. A primeira foto é usada como capa na vitrine.</p>
+  <figure class="media">
+    <img src="img/07-admin-animais.png" alt="Lista de animais no painel">
+    <figcaption><b>Figura 17</b> – Painel administrativo: lista de animais <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+  <figure class="alta">
+    <img src="img/08-admin-editor.png" alt="Editor de animal">
+    <figcaption><b>Figura 18</b> – Painel administrativo: edição do animal e gestão de fotos <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-2-3">9.2.3 Solicitações de adoção</h3>
+  <p>A fila de candidaturas mostra, para cada pedido, o candidato, o animal (com link para a ficha), os contatos, a cidade, o relato e o status. A coordenação aprova ou recusa com um clique, e pode filtrar por status. Na Figura 19, a candidatura da família Lima pela Pretinha aparece aprovada, e a de Paulo Henrique pelo Caramelo, recusada.</p>
+  <figure class="alta">
+    <img src="img/09-admin-adocoes.png" alt="Solicitações de adoção">
+    <figcaption><b>Figura 19</b> – Painel administrativo: solicitações de adoção <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h3 id="s9-2-4">9.2.4 Caixa de mensagens</h3>
+  <p>As mensagens recebidas pelo formulário de contato aparecem com o tipo em destaque — contato, voluntariado, doação ou denúncia. Mensagens já tratadas podem ser marcadas como lidas e ficam esmaecidas, de modo que a equipe identifica rapidamente o que ainda precisa de resposta.</p>
+  <figure class="alta">
+    <img src="img/10-admin-mensagens.png" alt="Caixa de mensagens">
+    <figcaption><b>Figura 20</b> – Painel administrativo: caixa de mensagens <span class="fonte">Fonte: Elaborado pelos autores (2026).</span></figcaption>
+  </figure>
+
+  <h2 id="s9-3">9.3 Fluxo completo de uma adoção</h2>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 13</b> – Fluxo de uma adoção no sistema</div>
+    <table>
+      <thead><tr><th style="width:4%">#</th><th style="width:13%">Ator</th><th>Ação</th><th style="width:30%">Endpoint</th><th style="width:14%">Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Admin</td><td>Cadastra o animal e envia as fotos</td><td><code>POST /api/animals</code><br><code>POST /api/animals/{id}/photos</code></td><td>disponivel</td></tr>
+        <tr><td>2</td><td>Visitante</td><td>Encontra o animal na vitrine e envia a candidatura</td><td><code>POST /api/adoptions</code></td><td>pendente</td></tr>
+        <tr><td>3</td><td>Admin</td><td>Analisa a fila, entra em contato e aprova</td><td><code>PATCH /api/adoptions/{id}</code></td><td>aprovado</td></tr>
+        <tr><td>4</td><td>Admin</td><td>Marca o animal como em processo de adoção</td><td><code>PUT /api/animals/{id}</code></td><td>em_processo</td></tr>
+        <tr><td>5</td><td>Admin</td><td>Após a entrega, marca o animal como adotado; ele sai da vitrine</td><td><code>PUT /api/animals/{id}</code></td><td>adotado</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+</section>
+
+<!-- ============ 10. SEGURANÇA ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s10">10. SEGURANÇA</h1>
+  <p>Por lidar com dados pessoais de adotantes, voluntários e denunciantes, a segurança foi tratada em várias camadas, da rede ao armazenamento.</p>
+
+  <h2 id="s10-1">10.1 Segurança em rede</h2>
+  <ul class="marcadores">
+    <li><b>Superfície mínima:</b> apenas o Nginx expõe porta; API e banco ficam na rede interna do Docker, inacessíveis de fora.</li>
+    <li><b>HTTPS:</b> terminação TLS no proxy reverso, com certificado Let's Encrypt renovado automaticamente.</li>
+    <li><b>Isolamento:</b> container LXC sem privilégios, separado de outros serviços do servidor Proxmox.</li>
+    <li><b>IP real do cliente:</b> o Nginx repassa o cabeçalho <code>X-Forwarded-For</code> e a API confia em exatamente um proxy, para que o limite de requisições funcione por visitante.</li>
+  </ul>
+
+  <h2 id="s10-2">10.2 Segurança da aplicação</h2>
+  <ul class="marcadores">
+    <li><b>Senhas com bcrypt</b> (custo 12), nunca em texto; mensagem de erro de login genérica, sem revelar se o e-mail existe.</li>
+    <li><b>Token JWT</b> assinado com segredo aleatório (o roteiro de instalação gera 48 bytes), validade de 8 horas, verificado em todas as rotas administrativas.</li>
+    <li><b>Validação de entrada</b> com zod em todas as rotas: tipos, tamanhos máximos, formatos de e-mail e data, valores enumerados.</li>
+    <li><b>Consultas parametrizadas</b> pelo Knex, prevenindo injeção de SQL.</li>
+    <li><b>Limite de requisições:</b> 20 por IP a cada 15 minutos no login e nos formulários públicos, contra força bruta e spam.</li>
+    <li><b>Upload seguro:</b> somente JPG, PNG e WEBP, até 5 MB, com nome de arquivo aleatório (UUID) gerado pelo servidor, o que impede sobrescrita e travessia de diretório.</li>
+    <li><b>Cabeçalhos de segurança</b> via helmet (Content-Security-Policy, X-Content-Type-Options, entre outros) e limite de 100 kB para corpos JSON.</li>
+    <li><b>Containers sem privilégios:</b> a API executa como usuário <code>node</code>, não como <i>root</i>.</li>
+    <li><b>Segredos fora do código:</b> senhas e chaves ficam no arquivo <code>.env</code>, ignorado pelo Git.</li>
+  </ul>
+</section>
+
+<!-- ============ 11. TESTES E RESULTADOS ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s11">11. TESTES E RESULTADOS</h1>
+
+  <h2 id="s11-1">11.1 Testes realizados</h2>
+  <p>O sistema foi validado em ambiente local, com um PostgreSQL temporário e isolado, por um roteiro de 31 casos de teste automatizados de ponta a ponta, executados diretamente contra a API em funcionamento. Todos os 31 casos foram aprovados. Em seguida, os fluxos principais foram verificados manualmente no navegador: vitrine, filtros, envio de candidatura, redirecionamento para o login, painel de adoções e editor de animais.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 14</b> – Casos de teste da API</div>
+    <table>
+      <thead><tr><th style="width:21%">Grupo</th><th>Casos verificados</th><th class="num" style="width:9%">Casos</th><th style="width:11%">Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>Saúde e autenticação</td><td>Health check; login com senha errada (401); login válido com e-mail em maiúsculas; consulta do usuário autenticado</td><td class="num">4</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Proteção e validação</td><td>Cadastro sem token (401); espécie inválida (400); JSON malformado (400); rota inexistente (404)</td><td class="num">4</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Animais</td><td>Cadastro; segundo cadastro; listagem pública; filtro por espécie; detalhe; animal inexistente (404); edição; exclusão</td><td class="num">8</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Fotos</td><td>Envio de duas fotos; rejeição de arquivo que não é imagem (400); foto servida com tipo correto; remoção do registro e do arquivo; remoção das fotos ao excluir o animal</td><td class="num">6</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Adoção</td><td>Candidatura válida; candidatura para animal já adotado (400); listagem sem token (401); listagem com nome do animal; aprovação; histórico mantido após exclusão do animal</td><td class="num">6</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Contato</td><td>Envio de mensagem; listagem; marcação como lida</td><td class="num">3</td><td class="st ok">Aprovado</td></tr>
+        <tr><td><b>Total</b></td><td></td><td class="num"><b>31</b></td><td class="st ok">31/31</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+  <p>Os testes revelaram um defeito, corrigido antes desta entrega: o driver do PostgreSQL convertia colunas do tipo <code>date</code> em objetos de data com fuso horário, o que poderia exibir a data do resgate com um dia de diferença dependendo do fuso do servidor. A correção faz o driver devolver a data como texto (<code>AAAA-MM-DD</code>), exatamente como foi gravada.</p>
+
+  <h2 id="s11-2">11.2 Objetivos alcançados</h2>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 15</b> – Objetivos alcançados</div>
+    <table>
+      <thead><tr><th>Objetivo</th><th style="width:16%">Situação</th><th style="width:30%">Evidência</th></tr></thead>
+      <tbody>
+        <tr><td>Site público com vitrine, filtros e candidatura</td><td class="st ok">Atingido ✔</td><td>Figuras 9 a 15</td></tr>
+        <tr><td>Canal único de contato, voluntariado, doação e denúncia</td><td class="st ok">Atingido ✔</td><td>Figuras 14 e 20</td></tr>
+        <tr><td>API REST com validação, JWT e bcrypt</td><td class="st ok">Atingido ✔</td><td>16 endpoints, Tabela 11</td></tr>
+        <tr><td>Banco PostgreSQL versionado por migrations</td><td class="st ok">Atingido ✔</td><td>5 tabelas, Tabelas 8 a 10</td></tr>
+        <tr><td>Empacotamento Docker e roteiro para Proxmox</td><td class="st ok">Atingido ✔</td><td>Figura 8, Tabela 12</td></tr>
+        <tr><td>Especificação completa e diagramas</td><td class="st ok">Atingido ✔</td><td>39 RF, 13 RNF, 10 RN, 5 diagramas</td></tr>
+        <tr><td>Sistema validado por testes</td><td class="st ok">Atingido ✔</td><td>31/31 casos aprovados, Tabela 14</td></tr>
+        <tr><td>Publicação em produção no servidor Proxmox</td><td class="st parcial">Próxima etapa</td><td>Infraestrutura pronta; implantação pendente</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+  <p>Em números, a entrega soma cerca de 480 linhas de código na API (14 arquivos), 1.440 linhas na interface (18 arquivos) e 130 linhas de infraestrutura (Dockerfiles, Compose, Nginx e backup), além da especificação e dos diagramas.</p>
+
+  <h2 id="s11-3">11.3 Desafios enfrentados</h2>
+  <ul class="marcadores">
+    <li><b>Migrations em ambientes diferentes:</b> o desenvolvimento ocorre no Windows e a produção em Linux, e a leitura automática do diretório de migrations com ES Modules depende de caminhos de arquivo que diferem entre os dois sistemas. Para eliminar esse risco desde o início, as migrations foram registradas explicitamente em um arquivo índice, sem depender do sistema de arquivos.</li>
+    <li><b>Docker dentro de LXC:</b> exige as opções <code>nesting</code> e <code>keyctl</code> e um container sem privilégios bem configurado; o roteiro foi documentado passo a passo no README.</li>
+    <li><b>Datas e fuso horário:</b> o defeito descrito na Seção 11.1 só aparece em certas combinações de fuso entre servidor e banco, e foi detectado graças aos testes.</li>
+    <li><b>Escopo:</b> o produto completo tem 39 requisitos. Priorizar o que traz adoções e visibilidade — e especificar o restante em detalhe — foi decisivo para entregar algo funcional e testado dentro do semestre.</li>
+  </ul>
+
+  <h2 id="s11-4">11.4 Trabalhos futuros</h2>
+  <ul class="marcadores">
+    <li><b>Prontuário veterinário</b> com eventos clínicos, cálculo automático de reforço vacinal e painel de pendências — a resposta ao surto de cinomose do estudo de caso.</li>
+    <li><b>Máquina de estados completa</b> da adoção, com exclusividade da candidatura aprovada (RN05), termo de adoção em PDF e acompanhamento em 30, 90 e 180 dias.</li>
+    <li><b>Módulo financeiro</b> com doações, despesas, custo por animal e relatório mensal de transparência para os padrinhos.</li>
+    <li><b>Perfis de acesso</b> veterinário e voluntário, gestão de usuários e log de auditoria.</li>
+    <li><b>Notificações</b> por e-mail e WhatsApp para a equipe e para os adotantes.</li>
+    <li><b>Conformidade com a LGPD</b>, redimensionamento automático de imagens e suíte de testes automatizados no repositório.</li>
+    <li><b>Observabilidade:</b> monitoramento do container e alertas de falha de backup.</li>
+  </ul>
+</section>
+
+<!-- ============ 12. CONCLUSÃO ============ -->
+<section class="cap">
+  <h1 class="titulo" id="s12">12. CONCLUSÃO</h1>
+  <p>O desenvolvimento do Resgate Animal mostrou que é possível construir, apenas com ferramentas de código aberto e em uma única linguagem — JavaScript —, uma solução profissional para um problema real do terceiro setor. A aplicação entregue cobre a parte da operação de uma ONG que mais impacta o resultado final, as adoções: o site público, a vitrine, a candidatura on-line e a centralização dos contatos em um painel único.</p>
+  <p>O estudo de caso da Associação Focinho Amigo, embora fictício, cumpriu um papel central: cada requisito pode ser rastreado até uma dor concreta. O episódio do Thor, prometido a duas famílias, originou a fila única de candidaturas e a regra de exclusividade; as denúncias perdidas no Instagram originaram a caixa de mensagens classificada; o surto de cinomose e a dificuldade de prestar contas orientaram os módulos de prontuário e financeiro, já especificados e modelados.</p>
+  <p>Do ponto de vista técnico, a combinação de validação por esquemas, restrições no próprio banco, migrations automáticas e containers Docker resultou em um sistema simples de operar e difícil de corromper — características importantes quando a manutenção pode ficar a cargo de voluntários. A infraestrutura sobre Proxmox e LXC mantém o custo de hospedagem baixo e permite backups completos do servidor em poucos minutos. Os 31 casos de teste aprovados, e o defeito de fuso horário encontrado e corrigido por eles, reforçam a importância de testar contra o sistema real, e não apenas contra simulações.</p>
+  <p>A próxima etapa natural é a publicação no servidor Proxmox, seguida da implementação dos módulos de prontuário e de adoção completa. Com a especificação, o modelo de dados e a arquitetura já definidos, essas evoluções podem ser feitas de forma incremental, sem retrabalho na base construída.</p>
+  <p>Conclui-se que os objetivos propostos para esta etapa foram atingidos e que o projeto proporcionou experiência prática em desenvolvimento full stack, modelagem de dados, segurança de aplicações web, containers e virtualização — um conjunto de competências diretamente aplicável ao mercado de tecnologia e, neste caso, a uma causa que merece boas ferramentas.</p>
+</section>
+
+<!-- ============ REFERÊNCIAS ============ -->
+<section class="cap referencias">
+  <h1 class="titulo" id="sref">REFERÊNCIAS</h1>
+  <p>DOCKER INC. <b>Docker Documentation</b>. Disponível em: https://docs.docker.com. Acesso em: out. 2026.</p>
+  <p>FIELDING, R. T. <b>Architectural Styles and the Design of Network-based Software Architectures</b>. Tese (Doutorado) – University of California, Irvine, 2000.</p>
+  <p>JONES, M.; BRADLEY, J.; SAKIMURA, N. <b>RFC 7519: JSON Web Token (JWT)</b>. IETF, 2015. Disponível em: https://www.rfc-editor.org/rfc/rfc7519. Acesso em: out. 2026.</p>
+  <p>KNEX.JS. <b>Knex.js: SQL query builder</b>. Disponível em: https://knexjs.org. Acesso em: out. 2026.</p>
+  <p>META PLATFORMS. <b>React Documentation</b>. Disponível em: https://react.dev. Acesso em: out. 2026.</p>
+  <p>OPENJS FOUNDATION. <b>Express Documentation</b>. Disponível em: https://expressjs.com. Acesso em: out. 2026.</p>
+  <p>OPENJS FOUNDATION. <b>Node.js Documentation</b>. Disponível em: https://nodejs.org/docs. Acesso em: out. 2026.</p>
+  <p>OWASP – OPEN WEB APPLICATION SECURITY PROJECT. <b>Password Storage Cheat Sheet</b>. Disponível em: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html. Acesso em: out. 2026.</p>
+  <p>POSTGRESQL GLOBAL DEVELOPMENT GROUP. <b>PostgreSQL Documentation</b>. Disponível em: https://www.postgresql.org/docs. Acesso em: out. 2026.</p>
+  <p>PROXMOX SERVER SOLUTIONS. <b>Proxmox VE Administration Guide</b>. Disponível em: https://pve.proxmox.com/pve-docs. Acesso em: out. 2026.</p>
+  <p>VITE. <b>Vite Documentation</b>. Disponível em: https://vite.dev. Acesso em: out. 2026.</p>
+  <p>ZOD. <b>Zod Documentation</b>. Disponível em: https://zod.dev. Acesso em: out. 2026.</p>
+</section>
+
+</body>
+</html>

@@ -528,9 +528,9 @@ Casos obrigatórios: tentativa de transição inválida de estado, adoção de a
    - Fluxo de adoção
    - Camadas da aplicação
    - Implantação (Proxmox / LXC / Docker)
-3. Diagrama de casos de uso. ⬜
-4. Protótipo de interface. ⬜
-5. Relatório de testes com evidências. ⬜
+3. [`docs/relatorio/Relatorio-Resgate-Animal.pdf`](docs/relatorio/Relatorio-Resgate-Animal.pdf): relatório final no formato acadêmico, com estudo de caso fictício (Associação Focinho Amigo), capturas de tela e testes. A fonte é `docs/relatorio/relatorio.html`; para regerar o PDF, abra no Chrome ou Edge e imprima com "Salvar como PDF", margens padrão e gráficos de fundo ativados.
+4. Diagrama de casos de uso. ⬜
+5. Protótipo de interface. ⬜
 
 ---
 
