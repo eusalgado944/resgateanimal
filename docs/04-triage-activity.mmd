@@ -1,0 +1,10 @@
+flowchart TD
+  inicio[Administrador autenticado] --> listar[Consultar candidaturas]
+  listar --> avaliar[Avaliar candidato e condições]
+  avaliar --> decisao{Decisão humana}
+  decisao --> aprovar[Aprovar candidatura]
+  decisao --> rejeitar[Rejeitar candidatura]
+  decisao --> manter[Manter pendente]
+  aprovar --> gravar[Salvar estado]
+  rejeitar --> gravar
+  manter --> gravar

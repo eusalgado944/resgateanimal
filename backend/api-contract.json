@@ -1,0 +1,62 @@
+{
+  "title": "Associação Focinho Amigo — API",
+  "caseStudy": true,
+  "runtime": "Node.js 24, PostgreSQL 18",
+  "baseUrl": "http://localhost:3000/api",
+  "setup": [
+    "cd backend && npm ci",
+    "Supply DATABASE_URL and a random JWT_SECRET of at least 32 bytes through environment variables; .env files are not automatically loaded.",
+    "npm run migrate && npm run seed",
+    "Set ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD (12+ characters, at most 72 UTF-8 bytes), then npm run bootstrap-admin; unset ADMIN_PASSWORD afterward.",
+    "npm start",
+    "Docker: use the root compose.yaml and root .env.example. From the repository root, docker compose up --build -d starts PostgreSQL 18, API and nginx; the single API service runs migrations on startup. Run docker compose exec api npm run seed for example animals. Bootstrap via docker compose run --rm -e ADMIN_EMAIL -e ADMIN_NAME -e ADMIN_PASSWORD api npm run bootstrap-admin.",
+    "E2E: use a dedicated disposable database and run TEST_DATABASE_URL=postgresql://... npm test. Tests migrate and truncate this database; do not point at production.",
+    "npm run check performs JavaScript syntax checks."
+  ],
+  "security": {
+    "scheme": "Bearer",
+    "auth": "The Authorization header contains the scheme, a space, then the login token. JWT uses HS256 and expires after 2 hours. Prefer keeping tokens in memory; never commit secrets.",
+    "cors": "One exact CORS_ORIGIN, default http://localhost:5173. No cookies.",
+    "rateLimits": "300 API requests per 15 minutes; 10 login attempts per 15 minutes; 20 combined public submissions per hour; 30 photo uploads per hour, per IP.",
+    "proxy": "TRUST_PROXY defaults to 0 (disabled); 1 trusts exactly one reverse-proxy hop. Root nginx must overwrite X-Forwarded-For with $remote_addr and the API must not have a publicly reachable host port. Never use trust-all true. An additional upstream TLS/load-balancer proxy requires separately configured trusted IP ranges and real-IP handling at nginx to preserve client identity; do not simply increase hop count or accept untrusted inbound forwarded headers.",
+    "upload": "Multipart field photo only, exactly one file, maximum 5 MB. PNG/JPEG/WebP MIME and signature validation; random server filename; no SVG, original filenames, HTML or directory listing. Files are served with nosniff and restrictive CSP.",
+    "privacy": "Applications and received messages are accessible only to administrators. Public submission responses contain ID/status only. This demo collects contact data; configure consent, retention and access procedures before real deployment.",
+    "scope": "One fictional case-study organization; inquiries only, no payment processing, no real emergency dispatch. Abuse reports should also be directed to local authorities when urgent."
+  },
+  "enums": {
+    "species": ["dog", "cat"],
+    "sex": ["male", "female"],
+    "size": ["small", "medium", "large"],
+    "animalStatus": ["available", "adopted", "unavailable"],
+    "applicationStatus": ["pending", "approved", "rejected"],
+    "messageType": ["contact", "volunteer", "donation", "abuse"],
+    "messageStatus": ["new", "read", "archived"]
+  },
+  "animal": {
+    "id": "uuid", "name": "string (1..120)", "species": "dog|cat",
+    "breed": "string (1..120), default Sem raça definida", "age": "string (1..80)",
+    "sex": "male|female", "size": "small|medium|large", "description": "string (1..5000)",
+    "status": "available|adopted|unavailable, default available",
+    "photoUrl": "null or relative /uploads/<uuid>.png|jpg|webp, set only by upload",
+    "featured": "boolean, default false"
+  },
+  "routes": [
+    { "method": "GET", "path": "/health", "response": { "status": "ok" } },
+    { "method": "GET", "path": "/organization", "response": { "organization": "name, tagline, description, email, phone, city, isCaseStudy, donationNotice" } },
+    { "method": "GET", "path": "/animals", "query": "species?, size?, search?, limit=24 (1..100), offset=0 (0..10000)", "response": { "animals": ["animal"], "total": "number" }, "note": "Only available animals, featured first." },
+    { "method": "GET", "path": "/animals/:id", "response": { "animal": "animal" }, "note": "Available animals only; 404 for nonpublic animals." },
+    { "method": "POST", "path": "/applications", "body": { "animalId": "uuid", "name": "2..120", "email": "email", "phone": "6..40, phone characters", "city": "2..120", "housing": "optional, max200", "experience": "optional, max2000", "message": "optional, max3000" }, "status": 201, "response": { "application": { "id": "uuid", "status": "pending" } } },
+    { "method": "POST", "path": "/messages", "body": { "type": "contact|volunteer|donation|abuse", "name": "2..120", "email": "email", "phone": "optional, 6..40", "message": "10..5000", "address": "optional, max300; required min5 for abuse" }, "status": 201, "response": { "message": { "id": "uuid", "status": "new" } } },
+    { "method": "POST", "path": "/admin/login", "body": { "email": "email", "password": "string" }, "response": { "token": "JWT", "admin": { "id": "uuid", "name": "string", "email": "email" } } },
+    { "method": "GET", "path": "/admin/animals", "protected": true, "query": "same filters/pagination as public list", "response": { "animals": ["animal"], "total": "number" }, "note": "All statuses." },
+    { "method": "POST", "path": "/admin/animals", "protected": true, "body": "animal without id/photoUrl; required name,species,age,sex,size,description", "status": 201, "response": { "animal": "animal" } },
+    { "method": "PATCH", "path": "/admin/animals/:id", "protected": true, "body": "one or more writable animal fields", "response": { "animal": "animal" } },
+    { "method": "DELETE", "path": "/admin/animals/:id", "protected": true, "status": 204, "note": "Deletes photo; keeps applications with animalName snapshot and null animalId." },
+    { "method": "POST", "path": "/admin/animals/:id/photo", "protected": true, "body": "multipart/form-data field photo", "response": { "animal": "animal" } },
+    { "method": "GET", "path": "/admin/applications", "protected": true, "query": "status?, limit=24, offset=0", "response": { "applications": ["id,animalId,animalName,name,email,phone,city,housing,experience,message,status,notes,createdAt"], "total": "number" } },
+    { "method": "PATCH", "path": "/admin/applications/:id", "protected": true, "body": { "status": "pending|approved|rejected", "notes": "optional, max3000" }, "response": { "application": "full application" }, "note": "Approval does not automatically mark an animal adopted; administrator sets animal status separately." },
+    { "method": "GET", "path": "/admin/messages", "protected": true, "query": "type?, status?, limit=24, offset=0", "response": { "messages": ["id,type,name,email,phone,message,address,status,createdAt"], "total": "number" } },
+    { "method": "PATCH", "path": "/admin/messages/:id", "protected": true, "body": { "status": "new|read|archived" }, "response": { "message": "full message" } }
+  ],
+  "errors": { "shape": { "error": "Portuguese description", "details": "optional validation array [{field,message}]" }, "codes": [400, 401, 404, 413, 429, 500], "note": "Malformed UUID/query/body:400; invalid login including malformed credentials:401; unknown record:404. Unknown body/query fields are rejected." }
+}

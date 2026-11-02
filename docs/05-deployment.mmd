@@ -1,0 +1,14 @@
+flowchart TD
+  navegador[Navegador] --> tls[Proxy HTTPS / TLS no servidor]
+  subgraph proxmox[Proxmox VE]
+    subgraph lxc[LXC Linux com Docker]
+      tls --> nginx[Nginx + arquivos React]
+      nginx --> api[Node.js 24 / Express 5]
+      api --> postgres[PostgreSQL 18]
+      api --> fotos[Volume de fotos]
+      postgres --> dados[Volume do banco]
+      rotina[Backup diário no host LXC] --> postgres
+      rotina --> fotos
+    end
+  end
+  rotina --> externo[Cópia externa protegida]

@@ -1,0 +1,16 @@
+sequenceDiagram
+  actor Visitante
+  participant UI as React
+  participant API as Express
+  participant DB as PostgreSQL
+  Visitante->>UI: Escolher animal e preencher formulário
+  UI->>API: POST candidatura
+  API->>API: Validar com zod
+  API->>DB: Consultar disponibilidade
+  alt Animal disponível
+    API->>DB: Inserir candidatura pendente
+    API-->>UI: 201 confirmação
+  else Animal inexistente ou indisponível
+    API-->>UI: Erro de validação/disponibilidade
+  end
+  UI-->>Visitante: Resultado

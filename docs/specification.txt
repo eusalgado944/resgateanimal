@@ -1,0 +1,83 @@
+RESGATE ANIMAL — ESPECIFICAÇÃO DE REFERÊNCIA
+
+Escopo: site e gestão de uma única ONG, usando a Associação Focinho Amigo
+como estudo de caso fictício. Os itens abaixo são uma proposta derivada
+do resumo fornecido, não a reprodução de requisitos acadêmicos não
+disponibilizados. O prontuário veterinário, controle financeiro e gestão
+continuada de escalas de voluntários são etapas futuras.
+
+39 REQUISITOS FUNCIONAIS
+RF01 Apresentar a ONG no site público.
+RF02 Exibir os canais de participação.
+RF03 Listar animais disponíveis para adoção.
+RF04 Mostrar detalhes de cada animal disponível.
+RF05 Exibir fotos dos animais.
+RF06 Exibir espécie dos animais.
+RF07 Exibir informações de idade dos animais.
+RF08 Exibir descrição dos animais.
+RF09 Receber candidatura vinculada a um animal disponível.
+RF10 Registrar nome do candidato.
+RF11 Registrar e-mail do candidato.
+RF12 Registrar telefone do candidato.
+RF13 Registrar a apresentação e condições oferecidas pelo candidato.
+RF14 Confirmar o recebimento da candidatura.
+RF15 Receber mensagens de contato.
+RF16 Receber interesse em voluntariado.
+RF17 Receber consultas sobre doação.
+RF18 Receber denúncias de maus-tratos.
+RF19 Identificar o remetente das mensagens.
+RF20 Registrar o texto das mensagens.
+RF21 Classificar mensagens por canal.
+RF22 Confirmar o recebimento de mensagens.
+RF23 Autenticar administrador com e-mail e senha.
+RF24 Encerrar a sessão na interface administrativa.
+RF25 Restringir operações administrativas a usuários autenticados.
+RF26 Cadastrar animal.
+RF27 Editar animal.
+RF28 Excluir animal conforme integridade referencial.
+RF29 Registrar disponibilidade do animal.
+RF30 Enviar foto de animal.
+RF31 Listar animais na área administrativa.
+RF32 Consultar candidaturas recebidas.
+RF33 Consultar os dados de cada candidato.
+RF34 Consultar o animal associado à candidatura.
+RF35 Atualizar o estado da triagem.
+RF36 Consultar mensagens recebidas.
+RF37 Consultar a categoria da mensagem.
+RF38 Atualizar o estado de atendimento de mensagens.
+RF39 Provisionar o primeiro administrador por comando operacional.
+
+13 REQUISITOS NÃO FUNCIONAIS
+RNF01 API REST em JavaScript, Node.js 24 e Express 5.
+RNF02 Interface em JavaScript, React 19 e Vite.
+RNF03 PostgreSQL 18 e acesso com Knex.
+RNF04 Estrutura do banco controlada por migrations versionadas.
+RNF05 Validar dados de entrada com zod.
+RNF06 Autenticação JWT com segredo externo ao código e expiração.
+RNF07 Armazenar senhas apenas com hash bcrypt.
+RNF08 Limitar tamanho de solicitações e uploads.
+RNF09 Oferecer interface responsiva com rótulos acessíveis.
+RNF10 Implantar em três containers Docker dentro de LXC no Proxmox VE.
+RNF11 Persistir banco e fotos em volumes independentes.
+RNF12 Realizar backup diário com procedimento de restauração.
+RNF13 Manter testes automatizados da API e instruções reproduzíveis.
+
+10 REGRAS DE NEGÓCIO
+RN01 A instalação representa uma única ONG.
+RN02 Somente animais disponíveis aparecem na vitrine pública.
+RN03 Candidatura exige animal existente e disponível.
+RN04 Candidatura começa aguardando triagem.
+RN05 A triagem é decisão administrativa, não aprovação automática.
+RN06 Formulário de doação registra interesse, não processa pagamentos.
+RN07 Formulário de voluntariado registra interesse, não cria escalas.
+RN08 Denúncias e dados pessoais de candidaturas não são públicos.
+RN09 Alterações de animais e atendimento exigem autenticação.
+RN10 A exclusão de animal deve preservar a integridade das candidaturas.
+
+CRITÉRIOS DE ACEITE
+Exercitar vitrine, candidatura, todos os canais, autenticação, gestão de
+animais/fotos, triagem e atendimento. Verificar entradas inválidas,
+acesso não autorizado, animal indisponível e limites de uploads.
+O número de testes aprovados deve ser informado a partir da execução,
+nunca deduzido do resumo. Implantação, TLS e recuperação de backup
+precisam de validação no servidor de destino.

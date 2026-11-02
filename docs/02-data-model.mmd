@@ -1,0 +1,25 @@
+erDiagram
+  ADMINISTRADOR {
+    uuid id PK
+    string email UK
+    string password_hash
+  }
+  ANIMAL {
+    uuid id PK
+    string name
+    string species
+    string status
+  }
+  CANDIDATURA {
+    uuid id PK
+    uuid animal_id FK
+    string email
+    string status
+  }
+  MENSAGEM {
+    uuid id PK
+    string type
+    string email
+    string status
+  }
+  ANIMAL |o--o{ CANDIDATURA : recebe
