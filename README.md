@@ -20,12 +20,12 @@ O problema que o sistema ataca: ONGs de pequeno e médio porte costumam controla
 
 | Item | Valor |
 |---|---|
-| Nome | |
-| Tempo de atuação | |
-| Animais abrigados (média) | |
-| Equipe fixa / veterinários parceiros | |
-| Voluntários ativos | |
-| Adoções por mês (média) | |
+| Nome | FormaCerta |
+| Tempo de atuação | 1 ano |
+| Animais abrigados (média) | 5 animais |
+| Equipe fixa / veterinários parceiros | 2 |
+| Voluntários ativos | 3 |
+| Adoções por mês (média) | 2 |
 | Fontes de receita | Doações de pessoa física, apadrinhamento, feiras |
 
 **Dores típicas a confirmar com a ONG:**
