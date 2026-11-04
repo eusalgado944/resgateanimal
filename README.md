@@ -529,8 +529,9 @@ Casos obrigatórios: tentativa de transição inválida de estado, adoção de a
    - Camadas da aplicação
    - Implantação (Proxmox / LXC / Docker)
 3. [`docs/relatorio/Relatorio-Resgate-Animal.pdf`](docs/relatorio/Relatorio-Resgate-Animal.pdf): relatório final no formato acadêmico, com estudo de caso fictício (Associação Focinho Amigo), capturas de tela e testes. A fonte é `docs/relatorio/relatorio.html`; para regerar o PDF, abra no Chrome ou Edge e imprima com "Salvar como PDF", margens padrão e gráficos de fundo ativados.
-4. Diagrama de casos de uso. ⬜
-5. Protótipo de interface. ⬜
+4. [`docs/video/roteiro-video.md`](docs/video/roteiro-video.md): roteiro do vídeo de apresentação (cerca de 10 min, um bloco por integrante), com as ilustrações para os dados de demonstração em `docs/video/fotos-demo/`.
+5. Diagrama de casos de uso. ⬜
+6. Protótipo de interface. ⬜
 
 ---
 
@@ -547,12 +548,14 @@ Casos obrigatórios: tentativa de transição inválida de estado, adoção de a
 
 ## 18. Equipe
 
-| Integrante | Responsabilidade |
-|---|---|
-| | Backend / domínio |
-| | Frontend |
-| | Infraestrutura (Proxmox / Docker) |
-| | Testes / documentação |
+| Integrante | RA | Responsabilidade |
+|---|---|---|
+| Breno Gomes da Silva | 324100064 | Frontend |
+| Caio Silveira Tornai | 3024106504 | Backend |
+| David Salgado Menendes | 3024104037 | Infraestrutura (Proxmox / Docker) e desenvolvimento full stack |
+| Eduardo Moura Souza Alecrim | 3024102578 | Backend |
+| Gabriel Eduardo Aguilar | 3026201753 | Testes / documentação |
+| Jessica Carolyne Rodrigues Rocha | 424103432 | Banco de dados (DBA) |
 
 ---
 
