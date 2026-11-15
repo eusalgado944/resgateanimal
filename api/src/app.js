@@ -13,6 +13,7 @@ import { statsRouter } from './routes/stats.js';
 
 export const app = express();
 
+
 // Atrás do Nginx (container web) — necessário para o rate limit enxergar o IP real.
 app.set('trust proxy', 1);
 app.use(helmet());
