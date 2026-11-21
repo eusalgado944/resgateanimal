@@ -572,7 +572,9 @@ Casos obrigatórios: tentativa de transição inválida de estado, adoção de a
 - Módulo de feiras de adoção com registro de resultados por evento.
 - Sugestão de compatibilidade entre perfil do adotante e do animal.
 - Aplicativo móvel consumindo a mesma API REST.
-
+- Geração automática do Termo de Adoção Responsável em PDF com suporte a assinatura digital.
+- Acompanhamento pós-adoção com envio periódico de fotos e formulários de adaptação nos primeiros meses.
+- Geração de etiqueta com QR Code para coleira vinculada à ficha do animal no sistema.
 ---
 
 ## 18. Equipe
