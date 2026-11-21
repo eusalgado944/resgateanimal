@@ -318,14 +318,16 @@
     <li>Tabela 5 – Situação dos requisitos funcionais por módulo</li>
     <li>Tabela 6 – Requisitos funcionais implementados</li>
     <li>Tabela 7 – Requisitos não funcionais</li>
-    <li>Tabela 8 – Estrutura da tabela <i>animals</i></li>
-    <li>Tabela 9 – Estrutura da tabela <i>adoption_requests</i></li>
-    <li>Tabela 10 – Estrutura das tabelas <i>users</i>, <i>animal_photos</i> e <i>contact_messages</i></li>
-    <li>Tabela 11 – Endpoints da API REST</li>
-    <li>Tabela 12 – Serviços do Docker Compose</li>
-    <li>Tabela 13 – Fluxo de uma adoção no sistema</li>
-    <li>Tabela 14 – Casos de teste da API</li>
-    <li>Tabela 15 – Objetivos alcançados</li>
+    <li>Tabela 8 – Regras de negócio do sistema</li>
+    <li>Tabela 9 – Estrutura da tabela <i>animals</i></li>
+    <li>Tabela 10 – Estrutura da tabela <i>adoption_requests</i></li>
+    <li>Tabela 11 – Estrutura das tabelas <i>users</i>, <i>animal_photos</i> e <i>contact_messages</i></li>
+    <li>Tabela 12 – Endpoints da API REST</li>
+    <li>Tabela 13 – Serviços do Docker Compose</li>
+    <li>Tabela 14 – Fluxo de uma adoção no sistema</li>
+    <li>Tabela 15 – Casos de teste da API</li>
+    <li>Tabela 16 – Verificação manual de fluxos e interface</li>
+    <li>Tabela 17 – Objetivos alcançados</li>
   </ul>
 </section>
 
@@ -391,11 +393,13 @@
     <li class="n1"><span class="t">10. SEGURANÇA</span><span class="dots"></span><span class="pg">45</span></li>
     <li class="n2"><span class="t">10.1 Segurança em rede</span><span class="dots"></span><span class="pg">45</span></li>
     <li class="n2"><span class="t">10.2 Segurança da aplicação</span><span class="dots"></span><span class="pg">45</span></li>
+    <li class="n2"><span class="t">10.3 Privacidade e adequação à LGPD</span><span class="dots"></span><span class="pg">45</span></li>
     <li class="n1"><span class="t">11. TESTES E RESULTADOS</span><span class="dots"></span><span class="pg">46</span></li>
     <li class="n2"><span class="t">11.1 Testes realizados</span><span class="dots"></span><span class="pg">46</span></li>
     <li class="n2"><span class="t">11.2 Objetivos alcançados</span><span class="dots"></span><span class="pg">47</span></li>
     <li class="n2"><span class="t">11.3 Desafios enfrentados</span><span class="dots"></span><span class="pg">47</span></li>
-    <li class="n2"><span class="t">11.4 Trabalhos futuros</span><span class="dots"></span><span class="pg">48</span></li>
+    <li class="n2"><span class="t">11.4 Limitações atuais</span><span class="dots"></span><span class="pg">48</span></li>
+    <li class="n2"><span class="t">11.5 Trabalhos futuros</span><span class="dots"></span><span class="pg">48</span></li>
     <li class="n1"><span class="t">12. CONCLUSÃO</span><span class="dots"></span><span class="pg">49</span></li>
     <li class="n1"><span class="t">REFERÊNCIAS</span><span class="dots"></span><span class="pg">50</span></li>
   </ul>
@@ -735,14 +739,26 @@
   </div>
 
   <h2 id="s5-4">5.4 Regras de negócio</h2>
-  <p>Dez regras de negócio orientam o comportamento do sistema. As mais relevantes para esta entrega são:</p>
-  <ul class="marcadores">
-    <li><b>RN02 — Bloqueio de adoção:</b> só recebem candidaturas animais com status <code>disponivel</code> ou <code>em_processo</code>. A API recusa candidaturas para animais adotados ou em tratamento (implementado).</li>
-    <li><b>RN03 e RN04 — Estados do animal e da adoção:</b> transições fora do grafo definido devem ser rejeitadas (Seção 6.3).</li>
-    <li><b>RN05 — Exclusividade:</b> um animal pode ter várias candidaturas, mas só uma aprovada; aprovar uma cancela as demais. É a resposta direta ao episódio do Thor.</li>
-    <li><b>RN07 — Alerta de pendência:</b> itens do prontuário a 30 dias ou menos do vencimento são "a vencer"; com a data ultrapassada, "vencidos".</li>
-    <li><b>RN09 — Exclusão lógica:</b> registros de animais, adoções e finanças nunca são apagados fisicamente, para preservar o histórico.</li>
-  </ul>
+  <p>Dez regras de negócio orientam o comportamento do sistema e garantem a integridade das operações da ONG. A Tabela 8 consolida todas as regras especificadas e indica o estado atual de implementação.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 8</b> – Regras de negócio do sistema</div>
+    <table>
+      <thead><tr><th style="width:9%">ID</th><th style="width:24%">Regra</th><th>Descrição</th><th style="width:17%">Situação</th></tr></thead>
+      <tbody>
+        <tr><td>RN01</td><td>Exibição na vitrine</td><td>Apenas animais com status <code>disponivel</code> aparecem na vitrine pública, utilizando a primeira foto cadastrada como capa.</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RN02</td><td>Bloqueio de adoção</td><td>Só recebem candidaturas animais com status <code>disponivel</code> ou <code>em_processo</code>; a API recusa pedidos para animais adotados ou em tratamento.</td><td class="st ok">Implementado</td></tr>
+        <tr><td>RN03</td><td>Estados do animal</td><td>As mudanças de status do animal devem respeitar o grafo definido na Seção 6.3, exigindo justificativa em retornos excepcionais.</td><td class="st parcial">Parcial</td></tr>
+        <tr><td>RN04</td><td>Estados da adoção</td><td>A candidatura deve evoluir de forma controlada entre triagem, entrevista, aprovação e entrega, sem saltar etapas obrigatórias.</td><td class="st parcial">Parcial</td></tr>
+        <tr><td>RN05</td><td>Exclusividade da adoção</td><td>Um animal pode receber várias candidaturas, mas apenas uma pode ser aprovada; aprovar uma cancela automaticamente as demais (resposta ao caso do Thor).</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RN06</td><td>Adoção responsável</td><td>A efetivação da adoção exige adotante maior de 18 anos, assinatura do termo de responsabilidade e agendamentos de acompanhamento em 30, 90 e 180 dias.</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RN07</td><td>Alerta de pendência</td><td>Eventos do prontuário veterinário a 30 dias ou menos do vencimento são sinalizados como "a vencer"; após a data, como "vencidos".</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RN08</td><td>Rastreabilidade financeira</td><td>Despesas registradas devem ser classificadas por categoria ou vinculadas a um animal específico para compor o custo individual e a prestação de contas.</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RN09</td><td>Exclusão lógica</td><td>Registros de animais, adoções e movimentações financeiras não devem ser apagados fisicamente, preservando o histórico auditável da ONG.</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RN10</td><td>Unicidade e perfis</td><td>Cada usuário administrativo possui e-mail único no banco e permissões restritas ao seu perfil (<code>admin</code>, <code>veterinario</code> ou <code>voluntario</code>).</td><td class="st parcial">Parcial</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
 </section>
 
 <!-- ============ 6. MODELAGEM ============ -->
@@ -760,7 +776,7 @@
   <h2 id="s6-2">6.2 Tabelas implementadas</h2>
   <p>A tabela <code>animals</code> é a entidade central do sistema. Os campos enumerados (espécie, sexo, porte e status) são protegidos por restrições <code>CHECK</code> criadas pela migration, de modo que nem mesmo um comando SQL manual consegue gravar um valor inválido.</p>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 8</b> – Estrutura da tabela <i>animals</i></div>
+    <div class="legenda-tab"><b>Tabela 9</b> – Estrutura da tabela <i>animals</i></div>
     <table>
       <thead><tr><th style="width:19%">Coluna</th><th style="width:15%">Tipo</th><th style="width:21%">Restrição</th><th>Descrição</th></tr></thead>
       <tbody>
@@ -783,7 +799,7 @@
 
   <p>A tabela <code>adoption_requests</code> registra cada candidatura. A chave estrangeira para o animal usa <code>ON DELETE SET NULL</code>: se um animal for excluído, o histórico da candidatura é preservado — comportamento verificado nos testes (Seção 11).</p>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 9</b> – Estrutura da tabela <i>adoption_requests</i></div>
+    <div class="legenda-tab"><b>Tabela 10</b> – Estrutura da tabela <i>adoption_requests</i></div>
     <table>
       <thead><tr><th style="width:19%">Coluna</th><th style="width:15%">Tipo</th><th style="width:21%">Restrição</th><th>Descrição</th></tr></thead>
       <tbody>
@@ -799,7 +815,7 @@
   </div>
 
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 10</b> – Estrutura das tabelas <i>users</i>, <i>animal_photos</i> e <i>contact_messages</i></div>
+    <div class="legenda-tab"><b>Tabela 11</b> – Estrutura das tabelas <i>users</i>, <i>animal_photos</i> e <i>contact_messages</i></div>
     <table>
       <thead><tr><th style="width:19%">Tabela</th><th style="width:36%">Colunas principais</th><th>Observação</th></tr></thead>
       <tbody>
@@ -837,9 +853,9 @@
   <p>A <b>apresentação</b> (React) nunca acessa o banco: toda comunicação ocorre por requisições HTTP com JSON. As <b>rotas REST</b> validam cada entrada com um esquema zod antes de qualquer operação, de forma que dados malformados são rejeitados com erro 400 e nunca chegam ao banco. Os <b>middlewares</b> transversais — autenticação JWT, limite de requisições e cabeçalhos de segurança (helmet) — são aplicados por rota. O <b>acesso a dados</b> usa o Knex, com consultas parametrizadas. O <b>domínio</b> concentra os valores enumerados em um único arquivo (<code>constants.js</code>), usado tanto pelas migrations quanto pela validação, para que banco e API nunca divirjam.</p>
 
   <h2 id="s7-2">7.2 API REST</h2>
-  <p>A API segue os princípios REST: cada entidade é um recurso identificado por uma URI, manipulado pelos métodos HTTP padronizados, com respostas em JSON e códigos de status significativos (201 para criação, 204 para alteração sem conteúdo, 400 para dados inválidos, 401 para falta de autenticação, 404 para recurso inexistente). Os 16 endpoints implementados estão na Tabela 11.</p>
+  <p>A API segue os princípios REST: cada entidade é um recurso identificado por uma URI, manipulado pelos métodos HTTP padronizados, com respostas em JSON e códigos de status significativos (201 para criação, 204 para alteração sem conteúdo, 400 para dados inválidos, 401 para falta de autenticação, 404 para recurso inexistente). Os 16 endpoints implementados estão na Tabela 12.</p>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 11</b> – Endpoints da API REST</div>
+    <div class="legenda-tab"><b>Tabela 12</b> – Endpoints da API REST</div>
     <table>
       <thead><tr><th style="width:11%">Método</th><th style="width:31%">Rota</th><th style="width:13%">Acesso</th><th>Descrição</th></tr></thead>
       <tbody>
@@ -879,7 +895,7 @@
 
   <h2 id="s8-2">8.2 Serviços do Docker Compose</h2>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 12</b> – Serviços do Docker Compose</div>
+    <div class="legenda-tab"><b>Tabela 13</b> – Serviços do Docker Compose</div>
     <table>
       <thead><tr><th style="width:11%">Serviço</th><th style="width:22%">Imagem</th><th style="width:16%">Porta</th><th>Função</th></tr></thead>
       <tbody>
@@ -984,7 +1000,7 @@
 
   <h2 id="s9-3">9.3 Fluxo completo de uma adoção</h2>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 13</b> – Fluxo de uma adoção no sistema</div>
+    <div class="legenda-tab"><b>Tabela 14</b> – Fluxo de uma adoção no sistema</div>
     <table>
       <thead><tr><th style="width:4%">#</th><th style="width:13%">Ator</th><th>Ação</th><th style="width:30%">Endpoint</th><th style="width:14%">Status</th></tr></thead>
       <tbody>
@@ -1024,6 +1040,13 @@
     <li><b>Containers sem privilégios:</b> a API executa como usuário <code>node</code>, não como <i>root</i>.</li>
     <li><b>Segredos fora do código:</b> senhas e chaves ficam no arquivo <code>.env</code>, ignorado pelo Git.</li>
   </ul>
+  <h2 id="s10-3">10.3 Privacidade e adequação à LGPD</h2>
+  <p>Como os formulários públicos coletam dados pessoais de adotantes, voluntários e denunciantes (nome, e-mail, telefone, cidade e relatos livres), o projeto considera os princípios da Lei Geral de Proteção de Dados (Lei nº 13.709/2018):</p>
+  <ul class="marcadores">
+    <li><b>Minimização de dados:</b> os formulários públicos solicitam apenas as informações estritamente necessárias para a triagem inicial da adoção ou atendimento da mensagem, evitando coleta excessiva (como CPF ou endereço completo) antes da etapa de entrevista.</li>
+    <li><b>Acesso restrito:</b> dados enviados pelos visitantes não ficam expostos em rotas públicas; a consulta é exclusiva de usuários autenticados na área administrativa.</li>
+    <li><b>Previsão de consentimento e anonimização (RNF11):</b> para a entrada em produção, está prevista a inclusão de termo de aceite explícito nos formulários públicos e de rotina para anonimização de dados pessoais de candidatos recusados ou após o encerramento do acompanhamento pós-adoção.</li>
+  </ul>
 </section>
 
 <!-- ============ 11. TESTES E RESULTADOS ============ -->
@@ -1033,7 +1056,7 @@
   <h2 id="s11-1">11.1 Testes realizados</h2>
   <p>O sistema foi validado em ambiente local, com um PostgreSQL temporário e isolado, por um roteiro de 31 casos de teste automatizados de ponta a ponta, executados diretamente contra a API em funcionamento. Todos os 31 casos foram aprovados. Em seguida, os fluxos principais foram verificados manualmente no navegador: vitrine, filtros, envio de candidatura, redirecionamento para o login, painel de adoções e editor de animais.</p>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 14</b> – Casos de teste da API</div>
+    <div class="legenda-tab"><b>Tabela 15</b> – Casos de teste da API</div>
     <table>
       <thead><tr><th style="width:21%">Grupo</th><th>Casos verificados</th><th class="num" style="width:9%">Casos</th><th style="width:11%">Resultado</th></tr></thead>
       <tbody>
@@ -1049,20 +1072,35 @@
     <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
   </div>
   <p>Os testes revelaram um defeito, corrigido antes desta entrega: o driver do PostgreSQL convertia colunas do tipo <code>date</code> em objetos de data com fuso horário, o que poderia exibir a data do resgate com um dia de diferença dependendo do fuso do servidor. A correção faz o driver devolver a data como texto (<code>AAAA-MM-DD</code>), exatamente como foi gravada.</p>
-
+  <p>De forma complementar aos testes automatizados da API, a Tabela 16 sintetiza os cenários funcionais e de interface (caixa-preta) verificados manualmente no navegador em resoluções de desktop e dispositivos móveis.</p>
+  <div class="tabela">
+    <div class="legenda-tab"><b>Tabela 16</b> – Verificação manual de fluxos e interface</div>
+    <table>
+      <thead><tr><th style="width:22%">Fluxo / Tela</th><th>Cenário testado</th><th>Comportamento esperado</th><th style="width:12%">Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>Vitrine pública</td><td>Combinação de filtros por espécie, sexo e porte</td><td>Atualização da listagem e reflexão dos parâmetros na URL</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Candidatura</td><td>Envio do formulário com campos obrigatórios vazios ou e-mail inválido</td><td>Bloqueio do envio e exibição de feedback visual ao usuário</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Proteção de rotas</td><td>Acesso direto à URL <code>/admin</code> sem token ativo</td><td>Redirecionamento automático para a tela de login</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Upload de fotos</td><td>Envio de arquivo acima de 5 MB ou formato não permitido</td><td>Rejeição pela API com retorno HTTP 400 e mensagem clara</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Responsividade</td><td>Navegação completa em viewport de celular (360 × 800 px)</td><td>Reorganização dos cartões em coluna única sem quebra horizontal</td><td class="st ok">Aprovado</td></tr>
+      </tbody>
+    </table>
+    <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
+  </div>
+  
   <h2 id="s11-2">11.2 Objetivos alcançados</h2>
   <div class="tabela">
-    <div class="legenda-tab"><b>Tabela 15</b> – Objetivos alcançados</div>
+    <div class="legenda-tab"><b>Tabela 17</b> – Objetivos alcançados</div>
     <table>
       <thead><tr><th>Objetivo</th><th style="width:16%">Situação</th><th style="width:30%">Evidência</th></tr></thead>
       <tbody>
         <tr><td>Site público com vitrine, filtros e candidatura</td><td class="st ok">Atingido ✔</td><td>Figuras 9 a 15</td></tr>
         <tr><td>Canal único de contato, voluntariado, doação e denúncia</td><td class="st ok">Atingido ✔</td><td>Figuras 14 e 20</td></tr>
-        <tr><td>API REST com validação, JWT e bcrypt</td><td class="st ok">Atingido ✔</td><td>16 endpoints, Tabela 11</td></tr>
-        <tr><td>Banco PostgreSQL versionado por migrations</td><td class="st ok">Atingido ✔</td><td>5 tabelas, Tabelas 8 a 10</td></tr>
-        <tr><td>Empacotamento Docker e roteiro para Proxmox</td><td class="st ok">Atingido ✔</td><td>Figura 8, Tabela 12</td></tr>
+        <tr><td>API REST com validação, JWT e bcrypt</td><td class="st ok">Atingido ✔</td><td>16 endpoints, Tabela 12</td></tr>
+        <tr><td>Banco PostgreSQL versionado por migrations</td><td class="st ok">Atingido ✔</td><td>5 tabelas, Tabelas 9 a 11</td></tr>
+        <tr><td>Empacotamento Docker e roteiro para Proxmox</td><td class="st ok">Atingido ✔</td><td>Figura 8, Tabela 13</td></tr>
         <tr><td>Especificação completa e diagramas</td><td class="st ok">Atingido ✔</td><td>39 RF, 13 RNF, 10 RN, 5 diagramas</td></tr>
-        <tr><td>Sistema validado por testes</td><td class="st ok">Atingido ✔</td><td>31/31 casos aprovados, Tabela 14</td></tr>
+        <tr><td>Sistema validado por testes</td><td class="st ok">Atingido ✔</td><td>31/31 casos aprovados, Tabela 15</td></tr>
         <tr><td>Publicação em produção no servidor Proxmox</td><td class="st parcial">Próxima etapa</td><td>Infraestrutura pronta; implantação pendente</td></tr>
       </tbody>
     </table>
@@ -1077,8 +1115,11 @@
     <li><b>Datas e fuso horário:</b> o defeito descrito na Seção 11.1 só aparece em certas combinações de fuso entre servidor e banco, e foi detectado graças aos testes.</li>
     <li><b>Escopo:</b> o produto completo tem 39 requisitos. Priorizar o que traz adoções e visibilidade — e especificar o restante em detalhe — foi decisivo para entregar algo funcional e testado dentro do semestre.</li>
   </ul>
+  <h2 id="s11-4">11.4 Limitações atuais</h2>
+  <p>Embora o núcleo operacional esteja funcional e validado, a versão atual possui limitações conhecidas que delimitam seu escopo: (i) os testes de desempenho sob carga (RNF08, com 1.000 registros simultâneos) ainda não foram executados; (ii) as imagens enviadas são armazenadas no formato original validado, sem redimensionamento ou compressão automática no servidor (RNF10); e (iii) a autenticação conta com perfil único de administrador, sem segregação granular para veterinários e voluntários.
+  </p>
 
-  <h2 id="s11-4">11.4 Trabalhos futuros</h2>
+  <h2 id="s11-5">11.5 Trabalhos futuros</h2>
   <ul class="marcadores">
     <li><b>Prontuário veterinário</b> com eventos clínicos, cálculo automático de reforço vacinal e painel de pendências — a resposta ao surto de cinomose do estudo de caso.</li>
     <li><b>Máquina de estados completa</b> da adoção, com exclusividade da candidatura aprovada (RN05), termo de adoção em PDF e acompanhamento em 30, 90 e 180 dias.</li>
