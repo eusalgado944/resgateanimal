@@ -17,8 +17,21 @@ export default function AdoptionsAdmin() {
     }
   }
 
-  const setStatus = (request, status) =>
-    run(() => api(`/adoptions/${request.id}`, { method: 'PATCH', body: { status } }));
+  function setStatus(request, status) {
+    if (status !== 'aprovado') {
+      return run(() => api(`/adoptions/${request.id}`, { method: 'PATCH', body: { status } }));
+    }
+    // RN05: aprovar reserva o animal e recusa as outras candidaturas pendentes para ele.
+    const others = requests.filter((r) => r.animal_id === request.animal_id && r.id !== request.id && r.status === 'pendente');
+    const warning = others.length
+      ? `\n\nAs outras ${others.length} candidatura(s) pendente(s) para ${request.animal_name} serão recusadas.`
+      : '';
+    if (!confirm(`Aprovar a candidatura de ${request.name} para ${request.animal_name}? O animal ficará "em processo de adoção".${warning}`)) return;
+    run(async () => {
+      const { declined } = await api(`/adoptions/${request.id}`, { method: 'PATCH', body: { status } });
+      if (declined) alert(`Candidatura aprovada. ${declined} outra(s) candidatura(s) para ${request.animal_name} foram recusadas.`);
+    });
+  }
 
   function anonymize(request) {
     if (!confirm(`Apagar os dados pessoais de ${request.name}? O registro da candidatura continua, sem identificação. Esta ação não pode ser desfeita.`)) return;

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { db } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
-import { upload, removeUpload } from '../middleware/upload.js';
+import { upload, processPhotos, discardTemp, removeUpload } from '../middleware/upload.js';
 import { viewLimit } from '../middleware/rateLimit.js';
 import { SPECIES, SEX, SIZES, ANIMAL_STATUS } from '../constants.js';
 
@@ -102,13 +102,14 @@ animalsRouter.post('/:id/photos', requireAuth, upload.array('photos', 10), async
   const files = req.files ?? [];
   const animal = await db('animals').where({ id }).first();
   if (!animal) {
-    files.forEach((f) => removeUpload(f.filename));
+    discardTemp(files);
     return res.status(404).json({ error: 'Animal não encontrado' });
   }
+  const filenames = await processPhotos(files);
   const { count } = await db('animal_photos').where({ animal_id: id }).count({ count: '*' }).first();
-  if (files.length) {
+  if (filenames.length) {
     await db('animal_photos').insert(
-      files.map((f, i) => ({ animal_id: id, filename: f.filename, position: Number(count) + i })),
+      filenames.map((filename, i) => ({ animal_id: id, filename, position: Number(count) + i })),
     );
   }
   res.status(201).json(await findAnimal(id));

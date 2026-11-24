@@ -170,7 +170,7 @@ export default function AnimalEditor() {
       {id && (
         <section className="card card-body">
           <h2>Fotos</h2>
-          <p className="muted">A primeira foto é usada como capa. JPG, PNG ou WEBP até 5 MB.</p>
+          <p className="muted">A primeira foto é usada como capa. JPG, PNG ou WEBP até 15 MB: o sistema reduz e otimiza cada foto automaticamente.</p>
           <div className="photo-grid">
             {animal.photos.map((p) => (
               <figure key={p.id}>

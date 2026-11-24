@@ -10,6 +10,7 @@ import { animalsRouter } from './routes/animals.js';
 import { adoptionsRouter } from './routes/adoptions.js';
 import { contactsRouter } from './routes/contacts.js';
 import { statsRouter } from './routes/stats.js';
+import { InvalidImageError, MAX_UPLOAD_MB, discardTemp } from './middleware/upload.js';
 
 export const app = express();
 
@@ -36,12 +37,17 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Rota não encontrad
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  // Uploads que falharam antes da conversão não podem ficar esquecidos na pasta temporária.
+  if (req.files) discardTemp(req.files);
   if (err instanceof ZodError) {
     return res.status(400).json({ error: 'Dados inválidos', details: err.issues });
   }
+  if (err instanceof InvalidImageError) {
+    return res.status(400).json({ error: err.message });
+  }
   if (err instanceof multer.MulterError) {
     const messages = {
-      LIMIT_FILE_SIZE: 'Cada imagem pode ter no máximo 5 MB',
+      LIMIT_FILE_SIZE: `Cada imagem pode ter no máximo ${MAX_UPLOAD_MB} MB`,
       LIMIT_FILE_COUNT: 'Envie no máximo 10 imagens por vez',
       LIMIT_UNEXPECTED_FILE: 'Apenas imagens JPG, PNG ou WEBP',
     };

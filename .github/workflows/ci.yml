@@ -1,0 +1,86 @@
+# Roda em todo push na main e em todo pull request: compila o site e sobe a stack
+# completa com Docker Compose (igual ao servidor) para executar os testes de ponta a ponta.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Build do site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  stack:
+    name: Docker + testes de ponta a ponta
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Criar .env descartável
+        run: |
+          cat > .env <<EOF
+          POSTGRES_DB=resgate
+          POSTGRES_USER=resgate
+          POSTGRES_PASSWORD=$(openssl rand -hex 16)
+          JWT_SECRET=$(openssl rand -hex 48)
+          ADMIN_NAME=CI
+          ADMIN_EMAIL=ci@teste.local
+          ADMIN_PASSWORD=$(openssl rand -hex 12)
+          WEB_PORT=8080
+          EOF
+
+      - name: Subir a stack (Nginx, API e Postgres)
+        run: docker compose up -d --build
+
+      - name: Aguardar a API responder pelo Nginx
+        run: |
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:8080/api/health && exit 0
+            sleep 2
+          done
+          echo "A API não respondeu a tempo"
+          exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+
+      - name: Instalar dependências dos testes
+        working-directory: api
+        run: npm ci
+
+      - name: Testes de ponta a ponta
+        working-directory: api
+        run: |
+          set -a; . ../.env; set +a
+          API_URL=http://localhost:8080 npm test
+
+      - name: Logs dos containers
+        if: failure()
+        run: docker compose logs
+
+      - name: Derrubar a stack
+        if: always()
+        run: docker compose down -v

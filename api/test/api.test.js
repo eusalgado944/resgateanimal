@@ -3,6 +3,7 @@
 // Os testes criam e apagam registros: nunca rode contra o banco de produção.
 import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
+import sharp from 'sharp';
 
 const B = (process.env.API_URL ?? 'http://localhost:3000') + '/api';
 const ADMIN = { email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD };
@@ -125,10 +126,34 @@ test('fotos', async (t) => {
   await t.test('arquivo que não é imagem -> 400', async () => {
     assert.equal((await upload([['oi', 'text/plain', 'x.txt']])).status, 400);
   });
-  await t.test('imagem acima de 5 MB -> 400 com mensagem', async () => {
-    const res = await upload([[Buffer.alloc(5 * 1024 * 1024 + 1), 'image/jpeg', 'grande.jpg']]);
+  await t.test('imagem acima de 15 MB -> 400 com mensagem', async () => {
+    const res = await upload([[Buffer.alloc(15 * 1024 * 1024 + 1), 'image/jpeg', 'grande.jpg']]);
     assert.equal(res.status, 400);
-    assert.match((await res.json()).error, /5 MB/);
+    assert.match((await res.json()).error, /15 MB/);
+  });
+  await t.test('foto grande é reduzida para 1280 px, em JPEG e sem EXIF', async () => {
+    const original = await sharp({ create: { width: 4000, height: 3000, channels: 3, background: '#e8772e' } })
+      .jpeg()
+      .withExif({ IFD0: { Artist: 'teste' } })
+      .toBuffer();
+    assert.ok((await sharp(original).metadata()).exif, 'a foto de teste precisa ter EXIF');
+    const res = await upload([[original, 'image/jpeg', 'celular.jpg']]);
+    assert.equal(res.status, 201);
+    const nova = (await res.json()).photos.at(-1);
+    assert.match(nova.filename, /\.jpg$/);
+    const url = `${B.replace(/\/api$/, '')}/uploads/${nova.filename}`;
+    const salvo = Buffer.from(await (await fetch(url)).arrayBuffer());
+    const meta = await sharp(salvo).metadata();
+    assert.equal(meta.width, 1280);
+    assert.equal(meta.height, 960);
+    assert.equal(meta.exif, undefined);
+    assert.ok(salvo.length < original.length);
+    assert.equal((await call(`/animals/${thor}/photos/${nova.id}`, { method: 'DELETE', token })).status, 204);
+  });
+  await t.test('arquivo corrompido com tipo de imagem -> 400', async () => {
+    const res = await upload([[Buffer.from('não sou uma imagem'), 'image/png', 'falsa.png']]);
+    assert.equal(res.status, 400);
+    assert.match((await res.json()).error, /não é uma imagem válida/);
   });
   await t.test('foto servida e removida do disco', async () => {
     const url = `${B.replace(/\/api$/, '')}/uploads/${photos[1].filename}`;
@@ -173,8 +198,10 @@ test('adoção e LGPD', async (t) => {
   await t.test('listagem exige login', async () => {
     assert.equal((await call('/adoptions')).status, 401);
   });
-  await t.test('aprovação', async () => {
-    assert.equal((await call(`/adoptions/${pedidoId}`, { method: 'PATCH', token, body: { status: 'aprovado' } })).status, 204);
+  await t.test('aprovação reserva o animal', async () => {
+    const r = await call(`/adoptions/${pedidoId}`, { method: 'PATCH', token, body: { status: 'aprovado' } });
+    assert.equal(r.status, 200);
+    assert.equal((await call(`/animals/${thor}`)).data.status, 'em_processo');
   });
   await t.test('anonimização apaga os dados pessoais', async () => {
     assert.equal((await call(`/adoptions/${pedidoId}/anonymize`, { method: 'POST', token })).status, 204);
@@ -184,6 +211,33 @@ test('adoção e LGPD', async (t) => {
     assert.ok(r.anonymized_at);
     assert.equal(r.status, 'aprovado', 'o histórico da adoção é preservado');
   });
+});
+
+test('RN05: uma única adoção aprovada por animal', async (t) => {
+  const bob = (await call('/animals', { method: 'POST', token, body: { name: 'Bob', species: 'cachorro', sex: 'macho', size: 'medio' } })).data.id;
+  const base = { phone: '11999990000', city: 'Suzano', ...consent, animal_id: bob };
+  for (const letra of ['A', 'B', 'C']) {
+    await call('/adoptions', { method: 'POST', body: { ...base, name: `Família ${letra}`, email: `${letra.toLowerCase()}@exemplo.com` } });
+  }
+  const porNome = async (nome) => (await call('/adoptions', { token })).data.find((r) => r.animal_id === bob && r.name === nome);
+
+  await t.test('aprovar uma recusa as outras pendentes e reserva o animal', async () => {
+    const r = await call(`/adoptions/${(await porNome('Família A')).id}`, { method: 'PATCH', token, body: { status: 'aprovado' } });
+    assert.equal(r.status, 200);
+    assert.equal(r.data.declined, 2);
+    assert.equal((await porNome('Família B')).status, 'recusado');
+    assert.equal((await porNome('Família C')).status, 'recusado');
+    assert.equal((await call(`/animals/${bob}`)).data.status, 'em_processo');
+  });
+  await t.test('segunda aprovação para o mesmo animal -> 409', async () => {
+    const id = (await porNome('Família B')).id;
+    await call(`/adoptions/${id}`, { method: 'PATCH', token, body: { status: 'pendente' } });
+    const r = await call(`/adoptions/${id}`, { method: 'PATCH', token, body: { status: 'aprovado' } });
+    assert.equal(r.status, 409);
+    assert.match(r.data.error, /Família A/);
+    assert.equal((await porNome('Família B')).status, 'pendente');
+  });
+  await call(`/animals/${bob}`, { method: 'DELETE', token });
 });
 
 test('contato e LGPD', async (t) => {
@@ -206,7 +260,7 @@ test('contato e LGPD', async (t) => {
 test('visão geral do painel', async () => {
   const r = await call('/stats', { token });
   assert.equal(r.status, 200);
-  assert.ok(r.data.byStatus.disponivel >= 1);
+  assert.ok(r.data.byStatus.em_processo >= 1, 'Thor fica em processo após a aprovação');
   assert.ok(r.data.approvedLast30Days >= 1);
   assert.ok(r.data.topViewed.some((a) => a.id === thor && a.views === 2));
 });

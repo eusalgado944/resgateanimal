@@ -188,8 +188,8 @@ O problema que o sistema ataca: ONGs de pequeno e médio porte costumam controla
 | RNF06 | O sistema deve ser executável via Docker Compose com um único comando e implantável em container LXC no Proxmox | ✅ |
 | RNF07 | Formulários públicos e login devem ter limite de requisições por IP | ✅ |
 | RNF08 | O sistema deve responder a 95% das requisições de listagem em menos de 2 segundos com base de 1.000 animais | ⬜ a medir |
-| RNF09 | A cobertura de testes automatizados da camada de serviço deve ser de no mínimo 60% | 🟡 suíte de ponta a ponta em `api/test` (30 cenários) |
-| RNF10 | As imagens enviadas devem ser redimensionadas para no máximo 1280px e 500KB | ⬜ hoje: limite de 5 MB, sem redimensionar |
+| RNF09 | A cobertura de testes automatizados da camada de serviço deve ser de no mínimo 60% | 🟡 suíte de ponta a ponta em `api/test` (34 cenários) rodando no CI |
+| RNF10 | As imagens enviadas devem ser redimensionadas para no máximo 1280px e 500KB | ✅ aceita até 15 MB e grava JPEG de até 1280 px, sem EXIF |
 | RNF11 | Conformidade com a LGPD: consentimento explícito no formulário público e possibilidade de anonimizar dados do adotante | ✅ RF40–RF43 |
 | RNF12 | Interface responsiva e com critérios básicos de acessibilidade (contraste, labels em formulários, navegação por teclado) | 🟡 |
 | RNF13 | Backup diário do banco e das fotos, com retenção de 14 dias | ✅ `scripts/backup.sh` |
@@ -223,6 +223,7 @@ solicitado → em_triagem → aprovado → entregue → em_acompanhamento → co
 Transições fora desse grafo devem ser rejeitadas pela API com erro `409`. A reprovação e o cancelamento exigem justificativa com no mínimo 20 caracteres.
 
 **RN05 — Exclusividade da candidatura.** Um animal pode ter várias candidaturas em `solicitado`, mas apenas uma em `aprovado`. Ao aprovar uma, as demais passam automaticamente para `cancelado` com justificativa padrão.
+> ✅ Implementado: ao aprovar, as outras candidaturas pendentes do animal são recusadas (`recusado`, enquanto o estado `cancelado` não existe), o animal passa para `em_processo` e uma segunda aprovação retorna `409`. A transação bloqueia a linha do animal para que duas aprovações simultâneas não passem juntas.
 
 **RN06 — Cálculo de reforço vacinal.** Vacina V8/V10 filhote: reforço em 21 dias, até 3 doses. Antirrábica: reforço anual. O intervalo é configurável por tipo de vacina em tabela de parâmetros.
 
@@ -422,10 +423,10 @@ resgate-animal/
 | GET | `/animals` | Público | Lista com filtros `species`, `sex`, `size`, `status` | ✅ |
 | GET | `/animals/:id` | Público | Detalhe com fotos | ✅ |
 | POST / PUT / DELETE | `/animals[/:id]` | admin | Cadastro, edição, exclusão | ✅ |
-| POST / DELETE | `/animals/:id/photos[/:photoId]` | admin | Envio e remoção de fotos | ✅ |
+| POST / DELETE | `/animals/:id/photos[/:photoId]` | admin | Envio (até 10 fotos de 15 MB, reduzidas a 1280 px) e remoção | ✅ |
 | POST | `/animals/:id/view` | Público | Soma uma visualização (o site só chama com consentimento de estatística) | ✅ |
 | POST | `/adoptions` | Público | Candidatura de adoção (exige `lgpd_consent: true`) | ✅ |
-| GET / PATCH | `/adoptions[/:id]` | admin | Fila e mudança de status | ✅ |
+| GET / PATCH | `/adoptions[/:id]` | admin | Fila e mudança de status (aprovar aplica a RN05; conflito retorna 409) | ✅ |
 | POST | `/adoptions/:id/anonymize` | admin | Apaga os dados pessoais da candidatura | ✅ |
 | POST | `/contacts` | Público | Mensagem de contato (exige `lgpd_consent: true`) | ✅ |
 | GET / PATCH | `/contacts[/:id]` | admin | Caixa de mensagens | ✅ |
@@ -527,7 +528,8 @@ O objetivo é que o dashboard e os relatórios já apareçam preenchidos em demo
 |---|---|---|---|
 | Unitário | Máquina de estados, cálculo de reforço vacinal e de custo por animal | `node:test` | ⬜ |
 | Integração | Rotas da API contra um PostgreSQL de teste | `node:test` + supertest | ⬜ |
-| Ponta a ponta | Login, permissões, validação, animais, fotos, visualizações, adoção, contato, LGPD (consentimento e anonimização), visão geral | `node:test` em `api/test/` | ✅ 30 cenários |
+| Ponta a ponta | Login, permissões, validação, animais, fotos (redução e EXIF), visualizações, adoção (RN05), contato, LGPD (consentimento e anonimização), visão geral | `node:test` em `api/test/` | ✅ 34 cenários |
+| Integração contínua | Build do site, imagens Docker e a suíte de ponta a ponta contra a stack completa, a cada push e pull request | GitHub Actions (`.github/workflows/ci.yml`) | ✅ |
 | Manual | Roteiro de casos de teste por requisito funcional | Planilha de evidências | ⬜ |
 
 **Rodando a suíte de ponta a ponta.** Os testes criam e apagam registros: use sempre um banco descartável, **nunca o de produção**. Suba a API apontando para esse banco (ex.: um Postgres local de testes) e, em outro terminal:
@@ -537,7 +539,9 @@ cd api
 API_URL=http://localhost:3000 ADMIN_EMAIL=<admin do .env> ADMIN_PASSWORD=<senha do .env> npm test
 ```
 
-Casos obrigatórios: tentativa de transição inválida de estado, adoção de animal não castrado, aprovação de candidatura cancelando as demais, acesso de `voluntario` a rota financeira (deve retornar 403).
+**Integração contínua.** A cada push na `main` e em todo pull request, o GitHub Actions compila o site e sobe a stack inteira com Docker Compose (Nginx, API e Postgres, como no servidor) para rodar a suíte contra ela. O resultado aparece ao lado do commit no GitHub, na aba *Actions* e na página do pull request. Se ficar vermelho, abra o job para ver qual teste falhou e os logs dos containers. **Não faça `git pull` no servidor de uma versão com CI vermelho.**
+
+Casos obrigatórios: tentativa de transição inválida de estado, adoção de animal não castrado, aprovação de candidatura cancelando as demais ✅, acesso de `voluntario` a rota financeira (deve retornar 403).
 
 ---
 

@@ -269,14 +269,14 @@
 <!-- ============ RESUMO ============ -->
 <section class="pre texto">
   <h2>RESUMO</h2>
-  <p>O presente trabalho descreve a especificação, o desenvolvimento e a preparação para implantação do <b>Resgate Animal</b>, uma plataforma web para organizações não governamentais (ONGs) de resgate e proteção animal. O sistema reúne, em uma única aplicação, o site público da ONG — com vitrine de animais para adoção, candidatura on-line e canal de contato, voluntariado, doação e denúncia — e uma área administrativa para cadastro de animais com fotos, triagem das candidaturas e gestão das mensagens recebidas. Para contextualizar o problema, foi construído um estudo de caso fictício, a Associação Focinho Amigo, cuja operação dependia de cadernos, planilhas e mensagens de WhatsApp. A aplicação foi desenvolvida integralmente em JavaScript: API REST em Node.js 24 com Express 5, validação por esquemas zod, autenticação JWT, senhas com bcrypt e acesso a dados com o <i>query builder</i> Knex; interface em React 19 com Vite; e banco de dados PostgreSQL 18 com <i>migrations</i> versionadas. A infraestrutura foi projetada para um servidor Proxmox VE, com a aplicação empacotada em três containers Docker (Nginx, API e banco) dentro de um container LXC, rotina de backup diário e documentação de implantação. O sistema conta ainda com aviso de cookies por categoria, Política de Privacidade, consentimento registrado nos formulários e anonimização de dados pessoais, em adequação à LGPD. Foi validado por uma suíte de 30 cenários de teste automatizados de ponta a ponta na API, todos aprovados, além de verificação manual das telas, e está publicado em um container LXC no Proxmox. O trabalho também entrega a especificação completa do produto — 48 requisitos funcionais, 13 não funcionais e 13 regras de negócio — e cinco diagramas de modelagem, servindo de base para as próximas etapas: prontuário veterinário, controle financeiro e voluntariado.</p>
+  <p>O presente trabalho descreve a especificação, o desenvolvimento e a preparação para implantação do <b>Resgate Animal</b>, uma plataforma web para organizações não governamentais (ONGs) de resgate e proteção animal. O sistema reúne, em uma única aplicação, o site público da ONG — com vitrine de animais para adoção, candidatura on-line e canal de contato, voluntariado, doação e denúncia — e uma área administrativa para cadastro de animais com fotos, triagem das candidaturas e gestão das mensagens recebidas. Para contextualizar o problema, foi construído um estudo de caso fictício, a Associação Focinho Amigo, cuja operação dependia de cadernos, planilhas e mensagens de WhatsApp. A aplicação foi desenvolvida integralmente em JavaScript: API REST em Node.js 24 com Express 5, validação por esquemas zod, autenticação JWT, senhas com bcrypt e acesso a dados com o <i>query builder</i> Knex; interface em React 19 com Vite; e banco de dados PostgreSQL 18 com <i>migrations</i> versionadas. A infraestrutura foi projetada para um servidor Proxmox VE, com a aplicação empacotada em três containers Docker (Nginx, API e banco) dentro de um container LXC, rotina de backup diário e documentação de implantação. O sistema conta ainda com aviso de cookies por categoria, Política de Privacidade, consentimento registrado nos formulários e anonimização de dados pessoais, em adequação à LGPD. Foi validado por uma suíte de 34 cenários de teste automatizados de ponta a ponta na API, todos aprovados, além de verificação manual das telas, e está publicado em um container LXC no Proxmox. O trabalho também entrega a especificação completa do produto — 48 requisitos funcionais, 13 não funcionais e 13 regras de negócio — e cinco diagramas de modelagem, servindo de base para as próximas etapas: prontuário veterinário, controle financeiro e voluntariado.</p>
   <p class="sem-recuo palavras"><b>Palavras-chave:</b> ONG; Proteção animal; Adoção; Node.js; React; PostgreSQL; Docker; Proxmox; Sistemas Web.</p>
 </section>
 
 <!-- ============ ABSTRACT ============ -->
 <section class="pre texto">
   <h2>ABSTRACT</h2>
-  <p>This paper describes the specification, development and deployment preparation of <b>Resgate Animal</b>, a web platform for animal rescue non-governmental organizations (NGOs). The system combines the NGO's public website — an adoption showcase, online adoption applications and a contact channel for volunteering, donations and abuse reports — with an administrative area for registering animals with photos, screening applications and managing incoming messages. To frame the problem, a fictional case study was created: the Focinho Amigo Association, whose operation relied on notebooks, spreadsheets and WhatsApp messages. The application was built entirely in JavaScript: a REST API on Node.js 24 with Express 5, zod schema validation, JWT authentication, bcrypt password hashing and the Knex query builder; a React 19 interface built with Vite; and a PostgreSQL 18 database with versioned migrations. The infrastructure was designed for a Proxmox VE server, packaging the application as three Docker containers (Nginx, API and database) inside an LXC container, with daily backups and deployment documentation. It also provides a category-based cookie banner, a privacy policy, recorded consent on public forms and anonymization of personal data, in line with the Brazilian LGPD. The system was validated by a suite of 30 automated end-to-end API test scenarios, all passing, plus manual screen verification, and is deployed in an LXC container on Proxmox. The work also delivers the full product specification — 48 functional requirements, 13 non-functional requirements and 13 business rules — and five modeling diagrams, laying the groundwork for the next stages: veterinary records, financial control and volunteer management.</p>
+  <p>This paper describes the specification, development and deployment preparation of <b>Resgate Animal</b>, a web platform for animal rescue non-governmental organizations (NGOs). The system combines the NGO's public website — an adoption showcase, online adoption applications and a contact channel for volunteering, donations and abuse reports — with an administrative area for registering animals with photos, screening applications and managing incoming messages. To frame the problem, a fictional case study was created: the Focinho Amigo Association, whose operation relied on notebooks, spreadsheets and WhatsApp messages. The application was built entirely in JavaScript: a REST API on Node.js 24 with Express 5, zod schema validation, JWT authentication, bcrypt password hashing and the Knex query builder; a React 19 interface built with Vite; and a PostgreSQL 18 database with versioned migrations. The infrastructure was designed for a Proxmox VE server, packaging the application as three Docker containers (Nginx, API and database) inside an LXC container, with daily backups and deployment documentation. It also provides a category-based cookie banner, a privacy policy, recorded consent on public forms and anonymization of personal data, in line with the Brazilian LGPD. The system was validated by a suite of 34 automated end-to-end API test scenarios, all passing, plus manual screen verification, and is deployed in an LXC container on Proxmox. The work also delivers the full product specification — 48 functional requirements, 13 non-functional requirements and 13 business rules — and five modeling diagrams, laying the groundwork for the next stages: veterinary records, financial control and volunteer management.</p>
   <p class="sem-recuo palavras"><b>Keywords:</b> NGO; Animal welfare; Adoption; Node.js; React; PostgreSQL; Docker; Proxmox; Web Systems.</p>
 </section>
 
@@ -400,10 +400,10 @@
     <li class="n2"><span class="t">10.3 Privacidade e adequação à LGPD</span><span class="dots"></span><span class="pg">51</span></li>
     <li class="n1"><span class="t">11. TESTES E RESULTADOS</span><span class="dots"></span><span class="pg">52</span></li>
     <li class="n2"><span class="t">11.1 Testes realizados</span><span class="dots"></span><span class="pg">52</span></li>
-    <li class="n2"><span class="t">11.2 Objetivos alcançados</span><span class="dots"></span><span class="pg">53</span></li>
+    <li class="n2"><span class="t">11.2 Objetivos alcançados</span><span class="dots"></span><span class="pg">54</span></li>
     <li class="n2"><span class="t">11.3 Desafios enfrentados</span><span class="dots"></span><span class="pg">54</span></li>
-    <li class="n2"><span class="t">11.4 Limitações atuais</span><span class="dots"></span><span class="pg">54</span></li>
-    <li class="n2"><span class="t">11.5 Trabalhos futuros</span><span class="dots"></span><span class="pg">54</span></li>
+    <li class="n2"><span class="t">11.4 Limitações atuais</span><span class="dots"></span><span class="pg">55</span></li>
+    <li class="n2"><span class="t">11.5 Trabalhos futuros</span><span class="dots"></span><span class="pg">55</span></li>
     <li class="n1"><span class="t">12. CONCLUSÃO</span><span class="dots"></span><span class="pg">56</span></li>
     <li class="n1"><span class="t">REFERÊNCIAS</span><span class="dots"></span><span class="pg">57</span></li>
   </ul>
@@ -566,7 +566,7 @@
       <thead><tr><th style="width:30%">Dor</th><th>Resposta do sistema</th><th style="width:17%">Situação</th></tr></thead>
       <tbody>
         <tr><td>Pedidos de adoção espalhados em quatro canais</td><td>Candidatura on-line na página de cada animal, centralizada em uma fila única no painel administrativo</td><td class="st ok">Implementado</td></tr>
-        <tr><td>Mesmo animal prometido a duas famílias</td><td>Status do animal visível para toda a equipe; regra RN05 (apenas uma candidatura aprovada por animal)</td><td class="st parcial">Parcial</td></tr>
+        <tr><td>Mesmo animal prometido a duas famílias</td><td>Status do animal visível para toda a equipe; regra RN05: aprovar uma candidatura reserva o animal e recusa as demais</td><td class="st ok">Implementado</td></tr>
         <tr><td>Denúncias e ofertas de ajuda perdidas</td><td>Formulário de contato com tipo (denúncia, voluntariado, doação) e caixa de mensagens com controle de leitura</td><td class="st ok">Implementado</td></tr>
         <tr><td>Vacinas vencidas sem alerta</td><td>Prontuário veterinário com cálculo de reforço e painel de pendências (RF13–RF15)</td><td class="st plan">Planejado</td></tr>
         <tr><td>Falta de prestação de contas</td><td>Registro de doações e despesas, custo por animal e relatório mensal de transparência (RF27–RF32)</td><td class="st plan">Planejado</td></tr>
@@ -594,7 +594,7 @@
 
   <h2 id="s3-4">3.4 React e Vite</h2>
   <p>O React é uma biblioteca para construção de interfaces baseada em componentes: cada parte da tela (cartão de animal, formulário, tabela) é uma função que recebe dados e devolve a interface correspondente. O site do Resgate Animal é uma <i>Single Page Application</i> (SPA): o navegador carrega a aplicação uma vez e, a partir daí, troca de página sem recarregar, buscando apenas dados em JSON na API. A navegação entre páginas usa o React Router.</p>
-  <p>O Vite é a ferramenta de desenvolvimento e empacotamento. Em desenvolvimento, oferece recarga instantânea e repassa as chamadas <code>/api</code> para a API local; em produção, gera arquivos estáticos otimizados (cerca de 88 kB compactados), servidos pelo Nginx.</p>
+  <p>O Vite é a ferramenta de desenvolvimento e empacotamento. Em desenvolvimento, oferece recarga instantânea e repassa as chamadas <code>/api</code> para a API local; em produção, gera arquivos estáticos otimizados (cerca de 93 kB compactados), servidos pelo Nginx.</p>
 
   <h2 id="s3-5">3.5 PostgreSQL</h2>
   <p>O PostgreSQL é um sistema gerenciador de banco de dados objeto-relacional de código aberto, com origem no projeto POSTGRES da Universidade da Califórnia em Berkeley. Implementa integralmente as propriedades ACID (atomicidade, consistência, isolamento e durabilidade), controle de concorrência multiversão (MVCC), restrições de integridade, chaves estrangeiras com ações em cascata e tipos avançados como <code>jsonb</code> e vetores. No Resgate Animal, as restrições do próprio banco — <code>NOT NULL</code>, <code>CHECK</code> para os valores enumerados e chaves estrangeiras com <code>ON DELETE CASCADE</code> ou <code>SET NULL</code> — formam uma segunda camada de proteção, além da validação feita pela API.</p>
@@ -645,7 +645,7 @@
         <tr><td>0 – Levantamento</td><td>Construção do estudo de caso, entrevista simulada, definição da stack (JavaScript + PostgreSQL + Proxmox)</td><td>Problemas e restrições documentados</td></tr>
         <tr><td>1 – Fundação</td><td>Estrutura do repositório, API REST, modelo de dados inicial, site público, painel administrativo, upload de fotos</td><td>Aplicação funcional em ambiente local</td></tr>
         <tr><td>2 – Infraestrutura</td><td>Dockerfiles, Docker Compose, configuração do Nginx, script de backup, roteiro de implantação em LXC</td><td>Implantação reproduzível com um comando</td></tr>
-        <tr><td>3 – Testes</td><td>Suíte de 30 cenários de teste de ponta a ponta na API (<code>npm test</code>), verificação manual das telas no navegador, correção de defeitos</td><td>Sistema validado localmente</td></tr>
+        <tr><td>3 – Testes</td><td>Suíte de 34 cenários de teste de ponta a ponta na API (<code>npm test</code>), verificação manual das telas no navegador, correção de defeitos</td><td>Sistema validado localmente</td></tr>
         <tr><td>4 – Especificação</td><td>Requisitos funcionais e não funcionais, regras de negócio, modelo de domínio completo, cronograma</td><td>Especificação no README</td></tr>
         <tr><td>5 – Documentação</td><td>Diagramas em draw.io, capturas de tela, este relatório</td><td>Relatório final</td></tr>
       </tbody>
@@ -663,6 +663,7 @@
     <li><b>Proxmox VE</b> — plataforma de virtualização de destino.</li>
     <li><b>draw.io (diagrams.net)</b> — diagramas de domínio, estados, arquitetura e implantação.</li>
     <li><b>Navegador com ferramentas de desenvolvedor</b> — verificação das telas, das requisições e da versão para celular.</li>
+    <li><b>GitHub e GitHub Actions</b> — repositório compartilhado da equipe, pull requests e integração contínua com build e testes a cada envio.</li>
   </ul>
 
   <h2 id="s4-3">4.3 Organização do repositório</h2>
@@ -744,7 +745,7 @@
         <tr><td>RNF07</td><td>Limite de requisições por IP em formulários públicos e login</td><td class="st ok">Atendido</td></tr>
         <tr><td>RNF08</td><td>95% das listagens em menos de 2 s com 1.000 animais</td><td class="st plan">A medir</td></tr>
         <tr><td>RNF09</td><td>Cobertura mínima de 60% de testes na camada de serviço</td><td class="st parcial">Parcial</td></tr>
-        <tr><td>RNF10</td><td>Imagens redimensionadas para até 1280 px e 500 KB</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RNF10</td><td>Imagens redimensionadas para até 1280 px e 500 KB</td><td class="st ok">Atendido</td></tr>
         <tr><td>RNF11</td><td>Conformidade com a LGPD (consentimento e anonimização)</td><td class="st ok">Atendido</td></tr>
         <tr><td>RNF12</td><td>Interface responsiva e acessível</td><td class="st parcial">Parcial</td></tr>
         <tr><td>RNF13</td><td>Backup diário do banco e das fotos, retenção de 14 dias</td><td class="st ok">Atendido</td></tr>
@@ -764,7 +765,7 @@
         <tr><td>RN02</td><td>Bloqueio de adoção</td><td>Só entra em processo de adoção o animal disponível, castrado (ou com castração agendada) e com vacinação em dia.</td><td class="st parcial">Parcial</td></tr>
         <tr><td>RN03</td><td>Estados do animal</td><td>As mudanças de status respeitam o grafo da Seção 6.3, com justificativa em desistências e devoluções.</td><td class="st parcial">Parcial</td></tr>
         <tr><td>RN04</td><td>Estados da adoção</td><td>A candidatura percorre solicitado, em triagem, aprovado, entregue, em acompanhamento e concluído; transições fora do grafo são rejeitadas e reprovação ou cancelamento exigem justificativa.</td><td class="st parcial">Parcial</td></tr>
-        <tr><td>RN05</td><td>Exclusividade da adoção</td><td>Um animal pode ter várias candidaturas, mas só uma aprovada; aprovar uma cancela as demais (resposta ao caso do Thor).</td><td class="st plan">Planejado</td></tr>
+        <tr><td>RN05</td><td>Exclusividade da adoção</td><td>Um animal pode ter várias candidaturas, mas só uma aprovada; aprovar uma recusa as demais pendentes e reserva o animal (resposta ao caso do Thor).</td><td class="st ok">Implementado</td></tr>
         <tr><td>RN06</td><td>Reforço vacinal</td><td>Vacina V8/V10 de filhote com reforço em 21 dias, até 3 doses; antirrábica anual; intervalos configuráveis por tipo de vacina.</td><td class="st plan">Planejado</td></tr>
         <tr><td>RN07</td><td>Alerta de pendência</td><td>Itens do prontuário a 30 dias ou menos do vencimento são "a vencer"; com a data ultrapassada, "vencidos".</td><td class="st plan">Planejado</td></tr>
         <tr><td>RN08</td><td>Custo por animal</td><td>Despesas diretas do animal somadas ao rateio das despesas gerais do mês entre os animais ativos.</td><td class="st plan">Planejado</td></tr>
@@ -885,12 +886,12 @@
         <tr><td>POST</td><td><code>/api/animals</code></td><td>Admin</td><td>Cadastra um animal</td></tr>
         <tr><td>PUT</td><td><code>/api/animals/{id}</code></td><td>Admin</td><td>Atualiza um animal</td></tr>
         <tr><td>DELETE</td><td><code>/api/animals/{id}</code></td><td>Admin</td><td>Exclui o animal e os arquivos de foto</td></tr>
-        <tr><td>POST</td><td><code>/api/animals/{id}/photos</code></td><td>Admin</td><td>Envia até 10 fotos (JPG, PNG, WEBP, até 5 MB)</td></tr>
+        <tr><td>POST</td><td><code>/api/animals/{id}/photos</code></td><td>Admin</td><td>Envia até 10 fotos (JPG, PNG, WEBP, até 15 MB), reduzidas a 1280 px</td></tr>
         <tr><td>DELETE</td><td><code>/api/animals/{id}/photos/{photoId}</code></td><td>Admin</td><td>Remove uma foto</td></tr>
         <tr><td>POST</td><td><code>/api/animals/{id}/view</code></td><td>Público</td><td>Soma uma visualização (só chamado com consentimento de estatística)</td></tr>
         <tr><td>POST</td><td><code>/api/adoptions</code></td><td>Público</td><td>Registra candidatura de adoção (exige aceite da Política de Privacidade)</td></tr>
         <tr><td>GET</td><td><code>/api/adoptions</code></td><td>Admin</td><td>Fila de candidaturas, com filtro por status</td></tr>
-        <tr><td>PATCH</td><td><code>/api/adoptions/{id}</code></td><td>Admin</td><td>Aprova, recusa ou volta para pendente</td></tr>
+        <tr><td>PATCH</td><td><code>/api/adoptions/{id}</code></td><td>Admin</td><td>Aprova (aplicando a RN05; conflito retorna 409), recusa ou volta para pendente</td></tr>
         <tr><td>POST</td><td><code>/api/adoptions/{id}/anonymize</code></td><td>Admin</td><td>Apaga os dados pessoais da candidatura</td></tr>
         <tr><td>POST</td><td><code>/api/contacts</code></td><td>Público</td><td>Envia mensagem de contato (exige aceite da Política de Privacidade)</td></tr>
         <tr><td>GET</td><td><code>/api/contacts</code></td><td>Admin</td><td>Caixa de mensagens</td></tr>
@@ -1028,9 +1029,8 @@
       <tbody>
         <tr><td>1</td><td>Admin</td><td>Cadastra o animal e envia as fotos</td><td><code>POST /api/animals</code><br><code>POST /api/animals/{id}/photos</code></td><td>disponivel</td></tr>
         <tr><td>2</td><td>Visitante</td><td>Encontra o animal na vitrine e envia a candidatura</td><td><code>POST /api/adoptions</code></td><td>pendente</td></tr>
-        <tr><td>3</td><td>Admin</td><td>Analisa a fila, entra em contato e aprova</td><td><code>PATCH /api/adoptions/{id}</code></td><td>aprovado</td></tr>
-        <tr><td>4</td><td>Admin</td><td>Marca o animal como em processo de adoção</td><td><code>PUT /api/animals/{id}</code></td><td>em_processo</td></tr>
-        <tr><td>5</td><td>Admin</td><td>Após a entrega, marca o animal como adotado; ele sai da vitrine</td><td><code>PUT /api/animals/{id}</code></td><td>adotado</td></tr>
+        <tr><td>3</td><td>Admin</td><td>Analisa a fila, entra em contato e aprova; o sistema reserva o animal e recusa as outras candidaturas pendentes (RN05)</td><td><code>PATCH /api/adoptions/{id}</code></td><td>aprovado / em_processo</td></tr>
+        <tr><td>4</td><td>Admin</td><td>Após a entrega, marca o animal como adotado; ele sai da vitrine</td><td><code>PUT /api/animals/{id}</code></td><td>adotado</td></tr>
       </tbody>
     </table>
     <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
@@ -1074,7 +1074,7 @@
     <li><b>Validação de entrada</b> com zod em todas as rotas: tipos, tamanhos máximos, formatos de e-mail e data, valores enumerados.</li>
     <li><b>Consultas parametrizadas</b> pelo Knex, prevenindo injeção de SQL.</li>
     <li><b>Limite de requisições:</b> 20 por IP a cada 15 minutos no login e nos formulários públicos, contra força bruta e spam.</li>
-    <li><b>Upload seguro:</b> somente JPG, PNG e WEBP, até 5 MB, com nome de arquivo aleatório (UUID) gerado pelo servidor, o que impede sobrescrita e travessia de diretório.</li>
+    <li><b>Upload seguro:</b> somente JPG, PNG e WEBP, até 15 MB. O original fica numa pasta temporária e o servidor grava apenas uma cópia reduzida (até 1280 px, em JPEG), com nome aleatório (UUID), o que impede sobrescrita e travessia de diretório. A conversão descarta os metadados EXIF, que em fotos de celular podem conter a localização GPS de quem fotografou; arquivos corrompidos são recusados.</li>
     <li><b>Cabeçalhos de segurança</b> via helmet (Content-Security-Policy, X-Content-Type-Options, entre outros) e limite de 100 kB para corpos JSON.</li>
     <li><b>Containers sem privilégios:</b> a API executa como usuário <code>node</code>, não como <i>root</i>.</li>
     <li><b>Segredos fora do código:</b> senhas e chaves ficam no arquivo <code>.env</code>, ignorado pelo Git.</li>
@@ -1096,7 +1096,7 @@
   <h1 class="titulo" id="s11">11. TESTES E RESULTADOS</h1>
 
   <h2 id="s11-1">11.1 Testes realizados</h2>
-  <p>O sistema foi validado em ambiente local, com um PostgreSQL temporário e isolado, por uma suíte de 30 cenários de teste automatizados de ponta a ponta, escritos com o <code>node:test</code> e versionados no repositório (<code>api/test</code>, executada com <code>npm test</code>), rodando contra a API em funcionamento. Todos os 30 cenários foram aprovados. A suíte também verificou a migração de um banco já em uso para a versão com consentimento e visualizações, sem perda de dados. Em seguida, os fluxos principais foram verificados manualmente no navegador: vitrine, filtros, envio de candidatura, redirecionamento para o login, painel de adoções e editor de animais.</p>
+  <p>O sistema foi validado em ambiente local, com um PostgreSQL temporário e isolado, por uma suíte de 34 cenários de teste automatizados de ponta a ponta, escritos com o <code>node:test</code> e versionados no repositório (<code>api/test</code>, executada com <code>npm test</code>), rodando contra a API em funcionamento. Todos os 34 cenários foram aprovados. A suíte roda automaticamente no GitHub Actions a cada push e pull request, contra a stack completa em Docker (Nginx, API e Postgres), exatamente como no servidor. A suíte também verificou a migração de um banco já em uso para a versão com consentimento e visualizações, sem perda de dados. Em seguida, os fluxos principais foram verificados manualmente no navegador: vitrine, filtros, envio de candidatura, redirecionamento para o login, painel de adoções e editor de animais.</p>
   <div class="tabela">
     <div class="legenda-tab"><b>Tabela 15</b> – Casos de teste da API</div>
     <table>
@@ -1105,12 +1105,12 @@
         <tr><td>Saúde e autenticação</td><td>Health check; login com senha errada (401); login com e-mail em maiúsculas; consulta do usuário autenticado</td><td class="num">4</td><td class="st ok">Aprovado</td></tr>
         <tr><td>Proteção e validação</td><td>Cadastro sem token (401); espécie inválida (400); JSON malformado (400); rota inexistente (404); estatísticas sem login (401)</td><td class="num">5</td><td class="st ok">Aprovado</td></tr>
         <tr><td>Animais</td><td>Cadastro com data sem deslocamento de fuso; filtros da listagem pública; animal inexistente (404); edição</td><td class="num">4</td><td class="st ok">Aprovado</td></tr>
-        <tr><td>Fotos</td><td>Envio de duas fotos; arquivo que não é imagem (400); imagem acima de 5 MB (400); foto servida e removida do disco; capa na listagem</td><td class="num">5</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Fotos</td><td>Envio de duas fotos; arquivo que não é imagem (400); imagem acima de 15 MB (400); foto de 4000 px reduzida a 1280 px, em JPEG e sem EXIF; arquivo corrompido (400); foto servida e removida do disco; capa na listagem</td><td class="num">7</td><td class="st ok">Aprovado</td></tr>
         <tr><td>Visualizações</td><td>Incremento do contador; animal inexistente (404)</td><td class="num">2</td><td class="st ok">Aprovado</td></tr>
-        <tr><td>Adoção e LGPD</td><td>Envio sem consentimento (400); envio com consentimento e data registrada; animal já adotado (400); listagem sem login (401); aprovação; anonimização preservando o histórico</td><td class="num">6</td><td class="st ok">Aprovado</td></tr>
+        <tr><td>Adoção e LGPD</td><td>Envio sem consentimento (400); envio com consentimento e data registrada; animal já adotado (400); listagem sem login (401); aprovação reservando o animal; anonimização preservando o histórico; RN05: aprovar recusa as demais; segunda aprovação (409)</td><td class="num">8</td><td class="st ok">Aprovado</td></tr>
         <tr><td>Contato e LGPD</td><td>Envio sem consentimento (400); envio, leitura e anonimização</td><td class="num">2</td><td class="st ok">Aprovado</td></tr>
         <tr><td>Painel e exclusão</td><td>Visão geral com contagens e mais vistos; exclusão do animal removendo fotos e preservando candidaturas</td><td class="num">2</td><td class="st ok">Aprovado</td></tr>
-        <tr><td><b>Total</b></td><td></td><td class="num"><b>30</b></td><td class="st ok">30/30</td></tr>
+        <tr><td><b>Total</b></td><td></td><td class="num"><b>34</b></td><td class="st ok">34/34</td></tr>
       </tbody>
     </table>
     <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
@@ -1144,14 +1144,14 @@
         <tr><td>Banco PostgreSQL versionado por migrations</td><td class="st ok">Atingido ✔</td><td>5 tabelas, Tabelas 9 a 11</td></tr>
         <tr><td>Empacotamento Docker e roteiro para Proxmox</td><td class="st ok">Atingido ✔</td><td>Figura 8, Tabela 13</td></tr>
         <tr><td>Especificação completa e diagramas</td><td class="st ok">Atingido ✔</td><td>48 RF, 13 RNF, 13 RN, 5 diagramas</td></tr>
-        <tr><td>Sistema validado por testes</td><td class="st ok">Atingido ✔</td><td>30/30 cenários aprovados, Tabela 15</td></tr>
+        <tr><td>Sistema validado por testes</td><td class="st ok">Atingido ✔</td><td>34/34 cenários aprovados, também no CI; Tabela 15</td></tr>
         <tr><td>Adequação à LGPD</td><td class="st ok">Atingido ✔</td><td>Seção 10.3, Figura 21</td></tr>
         <tr><td>Publicação no servidor Proxmox</td><td class="st ok">Atingido ✔</td><td>LXC na rede local; HTTPS e domínio pendentes</td></tr>
       </tbody>
     </table>
     <span class="fonte" style="text-align:center">Fonte: Elaborado pelos autores (2026).</span>
   </div>
-  <p>Em números, a entrega soma cerca de 830 linhas de código na API e nos testes, 2.570 linhas na interface e 130 linhas de infraestrutura (Dockerfiles, Compose, Nginx e backup), além da especificação e dos diagramas.</p>
+  <p>Em números, a entrega soma cerca de 970 linhas de código na API e nos testes, 2.580 linhas na interface e 210 linhas de infraestrutura e CI (Dockerfiles, Compose, Nginx, backup e GitHub Actions), além da especificação e dos diagramas.</p>
 
   <h2 id="s11-3">11.3 Desafios enfrentados</h2>
   <ul class="marcadores">
@@ -1161,17 +1161,17 @@
     <li><b>Escopo:</b> o produto completo tem 48 requisitos. Priorizar o que traz adoções e visibilidade — e especificar o restante em detalhe — foi decisivo para entregar algo funcional e testado dentro do semestre.</li>
   </ul>
   <h2 id="s11-4">11.4 Limitações atuais</h2>
-  <p>Embora o núcleo operacional esteja funcional e validado, a versão atual possui limitações conhecidas que delimitam seu escopo: (i) os testes de desempenho sob carga (RNF08, com 1.000 registros simultâneos) ainda não foram executados; (ii) as imagens enviadas são armazenadas no formato original validado, sem redimensionamento ou compressão automática no servidor (RNF10); (iii) a autenticação conta com perfil único de administrador, sem segregação granular para veterinários e voluntários; e (iv) o servidor ainda é acessado apenas pela rede local, sem HTTPS e domínio próprio.
+  <p>Embora o núcleo operacional esteja funcional e validado, a versão atual possui limitações conhecidas que delimitam seu escopo: (i) os testes de desempenho sob carga (RNF08, com 1.000 registros simultâneos) ainda não foram executados; (ii) a autenticação conta com perfil único de administrador, sem segregação granular para veterinários e voluntários; e (iii) o servidor ainda é acessado apenas pela rede local, sem HTTPS e domínio próprio.
   </p>
 
   <h2 id="s11-5">11.5 Trabalhos futuros</h2>
   <ul class="marcadores">
     <li><b>Prontuário veterinário</b> com eventos clínicos, cálculo automático de reforço vacinal e painel de pendências — a resposta ao surto de cinomose do estudo de caso.</li>
-    <li><b>Máquina de estados completa</b> da adoção, com exclusividade da candidatura aprovada (RN05), termo de adoção em PDF e acompanhamento em 30, 90 e 180 dias.</li>
+    <li><b>Máquina de estados completa</b> da adoção, com termo de adoção em PDF e acompanhamento em 30, 90 e 180 dias.</li>
     <li><b>Módulo financeiro</b> com doações, despesas, custo por animal e relatório mensal de transparência para os padrinhos.</li>
     <li><b>Perfis de acesso</b> veterinário e voluntário, gestão de usuários e log de auditoria.</li>
     <li><b>Notificações</b> por e-mail e WhatsApp para a equipe e para os adotantes.</li>
-    <li><b>Publicação na internet</b> com HTTPS e domínio próprio, redimensionamento automático de imagens e testes unitários da camada de serviço.</li>
+    <li><b>Publicação na internet</b> com HTTPS e domínio próprio, e testes unitários da camada de serviço.</li>
     <li><b>Observabilidade:</b> monitoramento do container e alertas de falha de backup.</li>
   </ul>
 </section>
@@ -1181,7 +1181,7 @@
   <h1 class="titulo" id="s12">12. CONCLUSÃO</h1>
   <p>O desenvolvimento do Resgate Animal mostrou que é possível construir, apenas com ferramentas de código aberto e em uma única linguagem — JavaScript —, uma solução profissional para um problema real do terceiro setor. A aplicação entregue cobre a parte da operação de uma ONG que mais impacta o resultado final, as adoções: o site público, a vitrine, a candidatura on-line e a centralização dos contatos em um painel único.</p>
   <p>O estudo de caso da Associação Focinho Amigo, embora fictício, cumpriu um papel central: cada requisito pode ser rastreado até uma dor concreta. O episódio do Thor, prometido a duas famílias, originou a fila única de candidaturas e a regra de exclusividade; as denúncias perdidas no Instagram originaram a caixa de mensagens classificada; o surto de cinomose e a dificuldade de prestar contas orientaram os módulos de prontuário e financeiro, já especificados e modelados.</p>
-  <p>Do ponto de vista técnico, a combinação de validação por esquemas, restrições no próprio banco, migrations automáticas e containers Docker resultou em um sistema simples de operar e difícil de corromper — características importantes quando a manutenção pode ficar a cargo de voluntários. A infraestrutura sobre Proxmox e LXC mantém o custo de hospedagem baixo e permite backups completos do servidor em poucos minutos. Os 30 cenários de teste aprovados, e o defeito de fuso horário encontrado e corrigido por eles, reforçam a importância de testar contra o sistema real, e não apenas contra simulações.</p>
+  <p>Do ponto de vista técnico, a combinação de validação por esquemas, restrições no próprio banco, migrations automáticas e containers Docker resultou em um sistema simples de operar e difícil de corromper — características importantes quando a manutenção pode ficar a cargo de voluntários. A infraestrutura sobre Proxmox e LXC mantém o custo de hospedagem baixo e permite backups completos do servidor em poucos minutos. Os 34 cenários de teste aprovados, executados a cada envio pelo GitHub Actions, e o defeito de fuso horário encontrado e corrigido por eles, reforçam a importância de testar contra o sistema real, e não apenas contra simulações.</p>
   <p>Com o sistema já publicado no servidor Proxmox, a próxima etapa natural é a publicação na internet com HTTPS, seguida da implementação dos módulos de prontuário e de adoção completa. Com a especificação, o modelo de dados e a arquitetura já definidos, essas evoluções podem ser feitas de forma incremental, sem retrabalho na base construída.</p>
   <p>Conclui-se que os objetivos propostos para esta etapa foram atingidos e que o projeto proporcionou experiência prática em desenvolvimento full stack, modelagem de dados, segurança de aplicações web, containers e virtualização — um conjunto de competências diretamente aplicável ao mercado de tecnologia e, neste caso, a uma causa que merece boas ferramentas.</p>
 </section>

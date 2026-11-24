@@ -32,7 +32,7 @@
 | Pipoca | cachorro / macho / pequeno | 18 | em tratamento | `pipoca.jpg` |
 | Nina | gato / fêmea / pequeno | 20 | adotado | `nina.jpg` |
 
-Use as descrições do Capítulo 2 / Seção 9 do relatório, ou escrevam as de vocês. Também enviem pelo site **uma candidatura** (para o Thor) e **duas mensagens** em "Como ajudar" (uma de voluntariado e uma denúncia), para o painel não aparecer vazio.
+Use as descrições do Capítulo 2 / Seção 9 do relatório, ou escrevam as de vocês. Também enviem pelo site **duas candidaturas para o Thor** (de duas famílias diferentes) e **duas mensagens** em "Como ajudar" (uma de voluntariado e uma denúncia), para o painel não aparecer vazio.
 
 **Navegador**
 - Janela em 1920×1080, zoom 110% a 125% para o texto ficar legível no vídeo.
@@ -85,10 +85,10 @@ Use as descrições do Capítulo 2 / Seção 9 do relatório, ou escrevam as de 
 | Ir direto para `/admin`, que redireciona para `/login`. | "Se alguém tenta abrir o painel sem login, o sistema leva para a tela de entrada." |
 | Fazer login (credenciais fora da tela). | "Depois de entrar, voltamos para a página que tínhamos pedido." |
 | Lista de animais. Clicar em **+ Cadastrar animal** e cadastrar a **Mel** (gato, fêmea, pequeno, 14 meses, castrada e vacinada). Salvar. | "Vamos cadastrar a Mel, que acabou de ser resgatada." |
-| No editor da Mel, enviar `mel.jpg` e `mel-2.jpg` de uma vez. Remover uma e enviar de novo. | "Podemos enviar várias fotos ao mesmo tempo e remover qualquer uma. A primeira foto vira a capa na vitrine." |
+| No editor da Mel, enviar `mel.jpg` e `mel-2.jpg` de uma vez. Remover uma e enviar de novo. | "Podemos enviar várias fotos ao mesmo tempo, direto da câmera do celular, com até 15 MB cada. O sistema reduz e otimiza cada uma sozinho. A primeira foto vira a capa na vitrine." |
 | Abrir o site em outra aba e mostrar a Mel na vitrine. | "E a Mel já aparece no site para adoção." |
-| Voltar ao painel, aba **Adoções**. Mostrar o pedido enviado no bloco 2 e clicar em **Aprovar**. | "Na fila de adoções aparece o pedido para o Thor, com contatos e o relato da família. A coordenação aprova ou recusa com um clique." |
-| Editar o Thor e mudar o status para **Em processo de adoção**. Mostrar que ele sai da vitrine. | "Com a adoção encaminhada, o Thor passa para 'em processo' e sai da vitrine, então novas famílias não o encontram mais na lista." |
+| Voltar ao painel, aba **Adoções**. Mostrar as duas famílias pedindo o Thor e clicar em **Aprovar** numa delas. Ler o aviso de confirmação. | "Lembram do Thor, prometido para duas famílias? Agora o sistema não deixa isso acontecer. Ao aprovar uma família, ele avisa que a outra candidatura será recusada." |
+| Confirmar. Trocar o filtro para **Todas** e mostrar a outra família como **Recusado**. Abrir a vitrine e mostrar que o Thor saiu. | "Pronto: uma família aprovada, a outra recusada automaticamente, e o Thor fica 'em processo de adoção', fora da vitrine. Se alguém tentar aprovar a segunda, o sistema bloqueia." |
 | Aba **Mensagens**. Mostrar a denúncia e clicar em **Marcar como lida**. | "As mensagens chegam separadas por tipo. Depois de tratada, a mensagem fica esmaecida e a equipe vê o que ainda falta responder." |
 
 ---
@@ -112,7 +112,8 @@ Use as descrições do Capítulo 2 / Seção 9 do relatório, ou escrevam as de 
 | [`api/src/routes/adoptions.js`](../../api/src/routes/adoptions.js) linhas 22 a 26. | "Aqui está uma regra de negócio: só aceitamos candidatura para animal disponível ou em processo. Se alguém tentar adotar um animal já adotado, a API recusa." |
 | [`api/src/routes/auth.js`](../../api/src/routes/auth.js) linhas 20 a 25. | "No login, comparamos a senha com o hash bcrypt guardado no banco. Se estiver certa, geramos um token JWT válido por 8 horas. A mensagem de erro é sempre a mesma, para não revelar se o e-mail existe." |
 | [`api/src/middleware/auth.js`](../../api/src/middleware/auth.js) linha 10. | "Esse token é verificado em toda rota administrativa." |
-| [`api/src/middleware/upload.js`](../../api/src/middleware/upload.js) linhas 7 a 16. | "No envio de fotos, aceitamos só JPG, PNG e WEBP de até 5 MB, e o nome do arquivo é um UUID gerado pelo servidor. Ninguém consegue sobrescrever arquivos ou enviar um script disfarçado." |
+| [`api/src/routes/adoptions.js`](../../api/src/routes/adoptions.js) a partir da linha 57 (função `approve`). | "Esta é a regra do Thor no código: tudo acontece numa transação que bloqueia o animal. Se já existe uma aprovada, devolvemos erro 409; senão, aprovamos, recusamos as outras e reservamos o animal. Nem dois cliques ao mesmo tempo passam." |
+| [`api/src/middleware/upload.js`](../../api/src/middleware/upload.js) linhas 20 a 61. | "No envio de fotos, aceitamos JPG, PNG e WEBP de até 15 MB. O original fica numa pasta temporária, e o servidor grava só uma cópia reduzida para 1280 pixels, com nome aleatório. De quebra, apagamos os dados EXIF, que em foto de celular podem guardar a localização GPS de quem tirou." |
 | [`api/src/middleware/rateLimit.js`](../../api/src/middleware/rateLimit.js) linha 6. | "E o login e os formulários públicos aceitam no máximo 20 envios a cada 15 minutos por IP, contra spam e força bruta." |
 
 ---
@@ -148,9 +149,10 @@ Use as descrições do Capítulo 2 / Seção 9 do relatório, ou escrevam as de 
 
 | Tela / ação | Fala sugerida |
 |---|---|
-| PDF, página 46 (Tabela 14, casos de teste). | "Validamos a API com 31 testes de ponta a ponta: login, permissões, validação, fotos, adoção e contato. Todos passaram, e eles ainda encontraram um defeito de fuso horário nas datas, que corrigimos." |
-| PDF, página 47 (Tabela 15, objetivos). | "Os objetivos desta etapa foram atingidos, e o sistema já está publicado no nosso servidor." |
-| README no GitHub, seção 5, com os requisitos e os status ✅ 🟡 ⬜. | "A especificação completa tem 39 requisitos. Os próximos passos são o prontuário veterinário com alerta de vacinas, o fluxo completo de adoção com termo em PDF e o módulo financeiro para prestação de contas." |
+| PDF, página 52 (Tabela 15, casos de teste). | "Validamos a API com 34 cenários de teste de ponta a ponta: login, permissões, fotos, adoção, a regra do Thor e a LGPD. Todos passaram, e eles ainda encontraram um defeito de fuso horário nas datas, que corrigimos." |
+| GitHub, aba **Actions**, com o último CI verde. | "E esses testes rodam sozinhos: a cada envio de código, o GitHub sobe o sistema inteiro em Docker e testa tudo. Se algo quebrar, a gente sabe antes de chegar ao servidor." |
+| PDF, página 54 (Tabela 17, objetivos). | "Os objetivos desta etapa foram atingidos, e o sistema já está publicado no nosso servidor." |
+| README no GitHub, seção 5, com os requisitos e os status ✅ 🟡 ⬜. | "A especificação completa tem 48 requisitos. Os próximos passos são o prontuário veterinário com alerta de vacinas, o fluxo completo de adoção com termo em PDF e o módulo financeiro para prestação de contas." |
 | Voltar para a página inicial do site. | "O Resgate Animal mostra que dá para construir, com software livre e baixo custo, uma ferramenta de verdade para quem cuida dos animais. Obrigado!" |
 | Tela final com os nomes e RAs dos integrantes. | (sem fala, 5 segundos) |
 

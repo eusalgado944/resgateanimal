@@ -43,12 +43,48 @@ adoptionsRouter.get('/', requireAuth, async (req, res) => {
 adoptionsRouter.patch('/:id', requireAuth, async (req, res) => {
   const id = idParam.parse(req.params.id);
   const { status } = z.object({ status: z.enum(ADOPTION_STATUS) }).parse(req.body);
+  if (status === 'aprovado') return approve(id, res);
   const updated = await db('adoption_requests')
     .where({ id })
     .update({ status, updated_at: db.fn.now() });
   if (!updated) return res.status(404).json({ error: 'Solicitação não encontrada' });
   res.status(204).end();
 });
+
+// RN05 — exclusividade: só uma candidatura aprovada por animal. Aprovar recusa as demais
+// pendentes e reserva o animal ("em processo"). A linha do animal fica bloqueada durante a
+// transação para que duas aprovações simultâneas não passem juntas.
+async function approve(id, res) {
+  const result = await db.transaction(async (trx) => {
+    const request = await trx('adoption_requests').where({ id }).first();
+    if (!request) return { status: 404, error: 'Solicitação não encontrada' };
+    if (request.status === 'aprovado') return { status: 200, declined: 0 };
+    if (!request.animal_id) return { status: 409, error: 'O animal desta candidatura foi removido' };
+
+    const animal = await trx('animals').where({ id: request.animal_id }).forUpdate().first();
+    const other = await trx('adoption_requests')
+      .where({ animal_id: animal.id, status: 'aprovado' })
+      .whereNot({ id })
+      .first();
+    if (other) {
+      return { status: 409, error: `${animal.name} já tem uma candidatura aprovada (${other.name})` };
+    }
+
+    const now = trx.fn.now();
+    await trx('adoption_requests').where({ id }).update({ status: 'aprovado', updated_at: now });
+    const declined = await trx('adoption_requests')
+      .where({ animal_id: animal.id, status: 'pendente' })
+      .whereNot({ id })
+      .update({ status: 'recusado', updated_at: now });
+    if (animal.status === 'disponivel') {
+      await trx('animals').where({ id: animal.id }).update({ status: 'em_processo', updated_at: now });
+    }
+    return { status: 200, declined };
+  });
+
+  if (result.error) return res.status(result.status).json({ error: result.error });
+  res.json({ declined: result.declined });
+}
 
 // Direito do titular (LGPD, art. 18): apaga os dados pessoais e mantém o registro para o histórico.
 adoptionsRouter.post('/:id/anonymize', requireAuth, async (req, res) => {
