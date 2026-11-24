@@ -188,7 +188,7 @@ O problema que o sistema ataca: ONGs de pequeno e médio porte costumam controla
 | RNF06 | O sistema deve ser executável via Docker Compose com um único comando e implantável em container LXC no Proxmox | ✅ |
 | RNF07 | Formulários públicos e login devem ter limite de requisições por IP | ✅ |
 | RNF08 | O sistema deve responder a 95% das requisições de listagem em menos de 2 segundos com base de 1.000 animais | ⬜ a medir |
-| RNF09 | A cobertura de testes automatizados da camada de serviço deve ser de no mínimo 60% | 🟡 suíte de ponta a ponta em `api/test` (37 casos) |
+| RNF09 | A cobertura de testes automatizados da camada de serviço deve ser de no mínimo 60% | 🟡 suíte de ponta a ponta em `api/test` (30 cenários) |
 | RNF10 | As imagens enviadas devem ser redimensionadas para no máximo 1280px e 500KB | ⬜ hoje: limite de 5 MB, sem redimensionar |
 | RNF11 | Conformidade com a LGPD: consentimento explícito no formulário público e possibilidade de anonimizar dados do adotante | ✅ RF40–RF43 |
 | RNF12 | Interface responsiva e com critérios básicos de acessibilidade (contraste, labels em formulários, navegação por teclado) | 🟡 |
@@ -234,6 +234,12 @@ Transições fora desse grafo devem ser rejeitadas pela API com erro `409`. A re
 > Hoje a exclusão de animal é física (com fotos). Passa a ser lógica quando o prontuário for implementado.
 
 **RN10 — Encerramento de apadrinhamento.** Quando um animal muda para `adotado` ou `obito`, todos os apadrinhamentos ativos vinculados a ele são encerrados e o padrinho é notificado por e-mail.
+
+**RN11 — Exibição na vitrine.** Apenas animais com status `disponivel` aparecem na vitrine pública, com a primeira foto cadastrada como capa. ✅
+
+**RN12 — Adoção responsável.** A efetivação da adoção exige adotante maior de 18 anos, assinatura do termo de responsabilidade e acompanhamentos agendados em 30, 90 e 180 dias. ⬜
+
+**RN13 — Unicidade e perfis.** Cada usuário administrativo tem e-mail único e permissões restritas ao seu perfil (`admin`, `veterinario` ou `voluntario`). 🟡 e-mail único; perfil único de admin.
 
 ---
 
@@ -521,7 +527,7 @@ O objetivo é que o dashboard e os relatórios já apareçam preenchidos em demo
 |---|---|---|---|
 | Unitário | Máquina de estados, cálculo de reforço vacinal e de custo por animal | `node:test` | ⬜ |
 | Integração | Rotas da API contra um PostgreSQL de teste | `node:test` + supertest | ⬜ |
-| Ponta a ponta | Login, permissões, validação, animais, fotos, visualizações, adoção, contato, LGPD (consentimento e anonimização), visão geral | `node:test` em `api/test/` | ✅ 37 casos |
+| Ponta a ponta | Login, permissões, validação, animais, fotos, visualizações, adoção, contato, LGPD (consentimento e anonimização), visão geral | `node:test` em `api/test/` | ✅ 30 cenários |
 | Manual | Roteiro de casos de teste por requisito funcional | Planilha de evidências | ⬜ |
 
 **Rodando a suíte de ponta a ponta.** Os testes criam e apagam registros: use sempre um banco descartável, **nunca o de produção**. Suba a API apontando para esse banco (ex.: um Postgres local de testes) e, em outro terminal:
@@ -575,6 +581,7 @@ Casos obrigatórios: tentativa de transição inválida de estado, adoção de a
 - Geração automática do Termo de Adoção Responsável em PDF com suporte a assinatura digital.
 - Acompanhamento pós-adoção com envio periódico de fotos e formulários de adaptação nos primeiros meses.
 - Geração de etiqueta com QR Code para coleira vinculada à ficha do animal no sistema.
+
 ---
 
 ## 18. Equipe

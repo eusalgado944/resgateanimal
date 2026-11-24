@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import AnimalCard from '../components/AnimalCard.jsx';
 import { useFetch } from '../components/useFetch.js';

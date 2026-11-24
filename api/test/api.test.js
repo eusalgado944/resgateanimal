@@ -125,6 +125,11 @@ test('fotos', async (t) => {
   await t.test('arquivo que não é imagem -> 400', async () => {
     assert.equal((await upload([['oi', 'text/plain', 'x.txt']])).status, 400);
   });
+  await t.test('imagem acima de 5 MB -> 400 com mensagem', async () => {
+    const res = await upload([[Buffer.alloc(5 * 1024 * 1024 + 1), 'image/jpeg', 'grande.jpg']]);
+    assert.equal(res.status, 400);
+    assert.match((await res.json()).error, /5 MB/);
+  });
   await t.test('foto servida e removida do disco', async () => {
     const url = `${B.replace(/\/api$/, '')}/uploads/${photos[1].filename}`;
     assert.equal((await fetch(url)).status, 200);
